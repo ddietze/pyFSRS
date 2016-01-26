@@ -27,18 +27,18 @@ Prerequisites:
 
 To run the bare GUI, you need the following modules installed:
 
-    * **wxPython**: The GUI is built on wxPython.
-    * **numpy**: Experimental data are stored and manipulated as numpy.arrays.
+* **wxPython**: The GUI is built on wxPython.
+* **numpy**: Experimental data are stored and manipulated as numpy.arrays.
 
 For the XCScan module, you also need:
 
-    * **scipy**: Fitting of cross-correlation data with Gaussians.
+* **scipy**: Fitting of cross-correlation data with Gaussians.
 
 For the devices, there are additional specific dependencies that have to be met:
 
-    * **pyVISA**: GPIB devices like lock-ins or stage controllers.
-    * **PyDAQmx**: National Instruments DAQ boards for in- and output (for shutters or stepper motors).
-    * **PICam library**: Princeton Instruments PICam compatible cameras.
+* **pyVISA**: GPIB devices like lock-ins or stage controllers.
+* **PyDAQmx**: National Instruments DAQ boards for in- and output (for shutters or stepper motors).
+* **PICam library**: Princeton Instruments PICam compatible cameras.
 
 Documentation
 =============
