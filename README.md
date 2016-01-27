@@ -6,6 +6,11 @@ femtosecond stimulated Raman spectroscopy and transient-absorption spectroscopy.
 However, it is not limited to these two applications and can be directly used for
 any other pump-probe experiment without modification.
 
+If you are interested in the technical and scientific details of FSRS, I recommend the following two papers as a starting point:
+
+* McCamant et al., *Appl. Spectrosc.* **57**, 1317 (2003).
+* McCamant et al., *Rev. Sci. Instrum.* **75**, 4971 (2004).
+
 The architecture of the program is modular and open, so that anyone can modify it according
 to his/her needs: The pyFSRS GUI is fully modular, i.e., all devices and measurement modi are 
 incorporated as modules that are loaded dynamically at startup. Therefore, extending pyFSRS is as easy 
