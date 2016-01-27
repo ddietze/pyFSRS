@@ -1,0 +1,662 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSRSPlot &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="next" title="FSRSutils" href="fsrsutils.html" />
+    <link rel="prev" title="FSRSModule.Eperiment" href="mexperiment.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsutils.html" title="FSRSutils"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mexperiment.html" title="FSRSModule.Eperiment"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" accesskey="U">Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-core.FSRSPlot">
+<span id="fsrsplot"></span><h1><cite>FSRSPlot</cite><a class="headerlink" href="#module-core.FSRSPlot" title="Permalink to this headline">¶</a></h1>
+<p>FSRSPlot is a lightweight plotting widget for wxPython for displaying pyFSRS measurement results.
+It supports multiple line and scatter plots, contour plots and image plots.
+While contour plots work on non-equidistantly sampled data and produce nice interpolated plots,
+image plots operate on 2d arrays and provide an enourmous advantage in speed.</p>
+<p>Further features include lin / log scale for x, y, and z axes (individually) as well as
+reading data coordinates with mouse cursor, two independent data cursors for exploring line/scatter
+data values and displaying the difference value.</p>
+<p>Example usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">FSRSPlot</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># setup a wxPython app</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+
+<span class="c"># get an instance of a plot frame</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">PlotFrame</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;pyFSRS - Test plot panel&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">640</span><span class="p">,</span> <span class="mi">480</span><span class="p">))</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">plotCanvas</span><span class="o">.</span><span class="n">setColormap</span><span class="p">(</span><span class="s">&quot;blue&quot;</span><span class="p">)</span>
+
+<span class="c"># get some nice data</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">X</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span><span class="n">Y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">5.0</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">plotCanvas</span><span class="o">.</span><span class="n">addImage</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">plotCanvas</span><span class="o">.</span><span class="n">addLine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span> <span class="o">+</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">5.0</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c"># show frame and start app</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="core.FSRSPlot.DualPlotFrame">
+<em class="property">class </em><code class="descclassname">core.FSRSPlot.</code><code class="descname">DualPlotFrame</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#DualPlotFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.DualPlotFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple plot window containing a two vertically stacked plot canvases.
+The upper / lower one can be accessed as <cite>upperPlotCanvas</cite> and <cite>lowerPlotCanvas</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="core.FSRSPlot.FSRSPlot">
+<em class="property">class </em><code class="descclassname">core.FSRSPlot.</code><code class="descname">FSRSPlot</code><span class="sig-paren">(</span><em>parent</em>, <em>id=-1</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>The FSRSPlot class is derived from wxPanel and provides a lightweight plotting interface
+for wxPython that not only supports line/scatter plots but also image and contour plots.</p>
+<p>I have kept the number of functions to control the layout to a minimum. Rather, the user is
+encouraged to directly mess with the class member variables. A list of variables and their default values are given in the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># display the cross cursor when mouse is present in plot area</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">showCross</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c"># display a grid</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">showGrid</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c"># linewidth, markerstyle and colors for scatter / line plot</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">markersize</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="c"># background color</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">bgcolor</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c"># margin of plotting area to boundary of panel in pixels</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">leftmargin</span> <span class="o">=</span> <span class="mi">60</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">bottommargin</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c"># axis and ticks; font and colors</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">ticklength</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">axisPen</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">PENSTYLE_SOLID</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">font</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTFAMILY_SWISS</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTSTYLE_NORMAL</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTWEIGHT_BOLD</span><span class="p">)</span>
+
+<span class="c"># display Delta-value, i.e. difference between cursors A and B</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">deltafont</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTFAMILY_SWISS</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTSTYLE_NORMAL</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTWEIGHT_BOLD</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">deltafontPen</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">PENSTYLE_SOLID</span><span class="p">)</span>
+
+<span class="c"># grid</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">gridPen</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">PENSTYLE_DOT</span><span class="p">)</span>
+
+<span class="c"># mouse crosshair</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">crossPenDark</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">PENSTYLE_SOLID</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">crossPenLight</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">PENSTYLE_SOLID</span><span class="p">)</span>
+
+<span class="c"># list of line colors; the color is cycled through the array for each new line or point</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">linescolor</span> <span class="o">=</span> <span class="p">[</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                   <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span> <span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">128</span><span class="p">)]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.Draw">
+<code class="descname">Draw</code><span class="sig-paren">(</span><em>dc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.Draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.Draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to draw the plots to a device context (dc).
+Plotting order is contour plots first, followed by image plots and line / scatter plots and axes, labels and cursors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnEraseBackground">
+<code class="descname">OnEraseBackground</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnEraseBackground"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnEraseBackground" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for background erase.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnKeyDown">
+<code class="descname">OnKeyDown</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnKeyDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnKeyDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for key-press event. Handles the following key strokes:</p>
+<ul class="simple">
+<li><strong>C</strong>: Clear plot.</li>
+<li><strong>X</strong>: Switch between linear and logarithmic scaling on x-axis.</li>
+<li><strong>Y</strong>: Switch between linear and logarithmic scaling on y-axis.</li>
+<li><strong>Z</strong>: Switch between linear and logarithmic scaling on z-axis. Affects only contour and image plots.</li>
+<li><strong>M</strong>: Center cursor A on maxium of active line/scatter plot.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnLMouseDown">
+<code class="descname">OnLMouseDown</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnLMouseDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnLMouseDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for left mouse button down. Positions cursor A on the data if the plot is not empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnMouseMove">
+<code class="descname">OnMouseMove</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnMouseMove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnMouseMove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for mouse move event. Updates current position of cursor in data coordinates.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnMouseWheel">
+<code class="descname">OnMouseWheel</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnMouseWheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnMouseWheel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for mouse wheel event. This event is used to switch the active line / scatter plot for the cursors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnPaint">
+<code class="descname">OnPaint</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnPaint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnPaint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for paint event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnRMouseDown">
+<code class="descname">OnRMouseDown</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnRMouseDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnRMouseDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event hanlder for right mouse button down. Positions cursor B on the data if the plot is not empty.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.OnResize">
+<code class="descname">OnResize</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.OnResize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.OnResize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler for resize event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.addContour">
+<code class="descname">addContour</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.addContour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.addContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add contour plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis of length N. Does not have to be uniform.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis of length M. Does not have to be uniform.</li>
+<li><strong>z</strong> (<em>array</em>) &#8211; z-data, MxN array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Plot id.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.addImage">
+<code class="descname">addImage</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.addImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.addImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an image plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis. Only the min/max values are used and the axis is linearly interpolated.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis. Only the min/max values are used and the axis is linearly interpolated.</li>
+<li><strong>z</strong> (<em>array</em>) &#8211; Image data, 2d-array.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Plot id.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.addLine">
+<code class="descname">addLine</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.addLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.addLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a line plot or single point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis. Can also be a single integer or floating point number.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis data with same shape as x.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Plot id.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.addScatter">
+<code class="descname">addScatter</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.addScatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.addScatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a scatter plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis. Can also be a single integer or floating point number.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis data with same shape as x.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Plot id.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.adjustAxis">
+<code class="descname">adjustAxis</code><span class="sig-paren">(</span><em>_min</em>, <em>_max</em>, <em>logscale=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.adjustAxis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.adjustAxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to adjust min, max and number of ticks to get nice looking axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>_min</strong> (<em>float</em>) &#8211; Minimum data value.</li>
+<li><strong>_max</strong> (<em>float</em>) &#8211; Maximum data value.</li>
+<li><strong>logscale</strong> (<em>bool</em>) &#8211; Set to True when axis is using logscale, to adapt the number of ticks (default=False).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Suggested min, max and number of ticks.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.data2screen">
+<code class="descname">data2screen</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.data2screen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.data2screen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data coordinates x, y to screen coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> (<em>mixed</em>) &#8211; Single x value or x-axis.</li>
+<li><strong>y</strong> (<em>mixed</em>) &#8211; Single y value or y-axis with same shape as x.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">i, j pixel coordinates (integers) with same shapes as x, y.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.drawAxes">
+<code class="descname">drawAxes</code><span class="sig-paren">(</span><em>dc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.drawAxes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.drawAxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to draw the axes plus labels. Takes also care of crosshair, mouse coordinates and delta.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.drawContour">
+<code class="descname">drawContour</code><span class="sig-paren">(</span><em>dc</em>, <em>cont</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.drawContour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.drawContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used internally to draw a contour plot (cont) to a device context (dc).
+<cite>cont</cite> is a tuple consisting of x-axis, y-axis and z-data (2d).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.drawCursor">
+<code class="descname">drawCursor</code><span class="sig-paren">(</span><em>dc</em>, <em>data</em>, <em>x</em>, <em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.drawCursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.drawCursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used internally to draw cursors.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.drawImage">
+<code class="descname">drawImage</code><span class="sig-paren">(</span><em>dc</em>, <em>img</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.drawImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.drawImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to draw an image (img) to a device context (dc).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.drawLine">
+<code class="descname">drawLine</code><span class="sig-paren">(</span><em>dc</em>, <em>data</em>, <em>type='line'</em>, <em>cursors=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.drawLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.drawLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used internally to draw a line/scatter plot (data, type) to a device context (dc).
+If cursors is True, draw cursors accordingly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.formatLabels">
+<code class="descname">formatLabels</code><span class="sig-paren">(</span><em>values</em>, <em>logscale=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.formatLabels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.formatLabels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to get nice, consistent formatting for the tick labels.
+Automatically decides for scientific or floating point notation and uses scientific prefixes to keep number of decimals below 3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>values</strong> (<em>array</em>) &#8211; Array of numeric values for which labels are to be generated.</li>
+<li><strong>logscale</strong> (<em>bool</em>) &#8211; Set to True, when axis uses logscale. This changes the appearance of the labels.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An array of strings with label texts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.formatNumber">
+<code class="descname">formatNumber</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.formatNumber"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.formatNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a formatted number according to the formatting rules that also apply to the labels. Use scientific prefixes and limit the number of decimals below 3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>float</em>) &#8211; Number.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Formatted string.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.getDataMinMax">
+<code class="descname">getDataMinMax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.getDataMinMax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.getDataMinMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to get the extent of data along x, y and z-axes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.getNumberOfPlots">
+<code class="descname">getNumberOfPlots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.getNumberOfPlots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.getNumberOfPlots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns total number of plots in this plot window.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.getZColor">
+<code class="descname">getZColor</code><span class="sig-paren">(</span><em>z</em>, <em>min=-1</em>, <em>max=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.getZColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.getZColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get RGB-tuples for z-values according to current colormap.</p>
+<p>When <cite>min == max</cite>, the full z-extent of the data is used for mapping.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z</strong> (<em>mixed</em>) &#8211; Single z-value, 1d or 2d-array of z-values.</li>
+<li><strong>min</strong> (<em>float</em>) &#8211; Minimum z value that gets mapped onto 0.</li>
+<li><strong>max</strong> (<em>float</em>) &#8211; Maximum z value that gets mapped onto 1.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">RGB-tuples with same shape as z.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.initVariables">
+<code class="descname">initVariables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.initVariables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.initVariables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init internally used variables and parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.interpolateColor">
+<code class="descname">interpolateColor</code><span class="sig-paren">(</span><em>alpha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.interpolateColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.interpolateColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used internally to calculate the rgb-values for a scalar alpha (0..1) and the currently set colormap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>alpha</strong> (<em>float</em>) &#8211; Scalar between 0 and 1.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">RGB-tuple.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.prepareMapping">
+<code class="descname">prepareMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.prepareMapping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.prepareMapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internally used to prepare the mapping from data to screen coordinates and vice-versa.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.removeLastPlot">
+<code class="descname">removeLastPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.removeLastPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.removeLastPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove last added plot from the stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.screen2data">
+<code class="descname">screen2data</code><span class="sig-paren">(</span><em>i</em>, <em>j</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.screen2data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.screen2data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert screen coordinates i, j to data coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>i</strong> (<em>mixed</em>) &#8211; Single i value or i-axis.</li>
+<li><strong>j</strong> (<em>mixed</em>) &#8211; Single j value or j-axis with same shape as i.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">x, y data coordinates (float) with same shapes as i, j.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setColormap">
+<code class="descname">setColormap</code><span class="sig-paren">(</span><em>cmap='rainbow'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setColormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setColormap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates the colormap with the given label for plotting.</p>
+<p>A colormap consists of a tuple of lists, the first containing the supporting points in the interval 0 to 1 and the second containing the respective r,g,b values as lists.
+For example, the &#8216;rgb&#8217; colormap is defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cmap</span> <span class="o">=</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span>            <span class="mf">0.5</span><span class="p">,</span>         <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmap</strong> (<em>mixed</em>) &#8211; Either name of the colormap or a colormap-defining tuple (default=&#8217;rgb&#8217;). Valid colormap names are &#8216;hot&#8217;, &#8216;rainbow&#8217;, &#8216;rgb&#8217;, &#8216;blue&#8217;, &#8216;red&#8217;, &#8216;green&#8217;, &#8216;rwb&#8217; (red-white-blue).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setContour">
+<code class="descname">setContour</code><span class="sig-paren">(</span><em>id</em>, <em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setContour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setContour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite an existing contour plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>int</em>) &#8211; Id or index of contour plot to overwrite. The plot at the given id must already be a contour plot.</li>
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis of length N. Does not have to be uniform.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis of length M. Does not have to be uniform.</li>
+<li><strong>z</strong> (<em>array</em>) &#8211; z-data, MxN array.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setImage">
+<code class="descname">setImage</code><span class="sig-paren">(</span><em>id</em>, <em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite an existing image plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>int</em>) &#8211; Id or index of image plot to overwrite. The plot at the given id must already be an image plot.</li>
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis. Only the min/max values are used and the axis is linearly interpolated.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis. Only the min/max values are used and the axis is linearly interpolated.</li>
+<li><strong>z</strong> (<em>array</em>) &#8211; Image data, 2d-array.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setLine">
+<code class="descname">setLine</code><span class="sig-paren">(</span><em>id</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setLine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite an existing line / scatter plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>int</em>) &#8211; Id or index of line / scatter plot to overwrite. The plot at the given id must already be a line / scatter plot.</li>
+<li><strong>x</strong> (<em>array</em>) &#8211; x-axis. Can also be a single integer or floating point number.</li>
+<li><strong>y</strong> (<em>array</em>) &#8211; y-axis data with same shape as x.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setScatter">
+<code class="descname">setScatter</code><span class="sig-paren">(</span><em>id</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setScatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setScatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <cite>setLine</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setXLabel">
+<code class="descname">setXLabel</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setXLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setXLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set x-axis label.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSPlot.FSRSPlot.setYLabel">
+<code class="descname">setYLabel</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#FSRSPlot.setYLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.FSRSPlot.setYLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set y-axis label.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="core.FSRSPlot.PlotFrame">
+<em class="property">class </em><code class="descclassname">core.FSRSPlot.</code><code class="descname">PlotFrame</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSPlot.html#PlotFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSPlot.PlotFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple plot window containing a single plot canvas which can be accessed as <cite>plotCanvas</cite>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsutils.html" title="FSRSutils"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mexperiment.html" title="FSRSModule.Eperiment"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyFSRS &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyFSRS</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module: pyFSRS</span>
+<span class="sd">   :platform: Windows</span>
+<span class="sd">.. moduleauthor:: Daniel R. Dietze &lt;daniel.dietze@berkeley.edu&gt;</span>
+
+<span class="sd">pyFSRS is a modular GUI for pump-probe-type optical experiments, specialized for</span>
+<span class="sd">femtosecond stimulated Raman spectroscopy and transient-absorption spectroscopy.</span>
+<span class="sd">However, it is not limited to these two applications and can be directly used for</span>
+<span class="sd">any other pump-probe experiment without modification.</span>
+
+<span class="sd">The architecture of the program is modular and open, so that anyone can modify it according</span>
+<span class="sd">to his / her needs.</span>
+
+<span class="sd">..</span>
+<span class="sd">   This file is part of the pyFSRS app.</span>
+
+<span class="sd">   This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">   it under the terms of the GNU General Public License as published by</span>
+<span class="sd">   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">   (at your option) any later version.</span>
+
+<span class="sd">   This program is distributed in the hope that it will be useful,</span>
+<span class="sd">   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">   GNU General Public License for more details.</span>
+
+<span class="sd">   You should have received a copy of the GNU General Public License</span>
+<span class="sd">   along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">   Copyright 2014-2016 Daniel Dietze &lt;daniel.dietze@berkeley.edu&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># import my pyFSRS modules</span>
+<span class="kn">import</span> <span class="nn">core.FSRSModule</span>
+<span class="kn">import</span> <span class="nn">core.ModulePanel</span> <span class="kn">as</span> <span class="nn">FSM</span>
+
+
+<span class="c"># main class</span>
+<div class="viewcode-block" id="pyFSRS"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS">[docs]</a><span class="k">class</span> <span class="nc">pyFSRS</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Main window of the pyFSRS application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">pyFSRS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetMinSize</span><span class="p">((</span><span class="mi">400</span><span class="p">,</span> <span class="mf">0.95</span> <span class="o">*</span> <span class="n">wx</span><span class="o">.</span><span class="n">GetDisplaySize</span><span class="p">()[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c"># load all modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadModules</span><span class="p">()</span>
+
+        <span class="c"># build the main GUI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">createUI</span><span class="p">()</span>
+
+        <span class="c"># make modules aware of their fellows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initializeModules</span><span class="p">()</span>
+
+        <span class="c"># set working directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_path</span> <span class="o">=</span> <span class="s">&quot;.&quot;</span>         <span class="c">#: Initial default path for save dialog boxes. Set to your preferred data directory.</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_path</span><span class="p">))</span>
+
+        <span class="c"># bind the app exit event to an event handler so we can check whether there are some experiments running and shut down all the modules properly</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CLOSE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onQuit</span><span class="p">)</span>
+
+        <span class="c"># display myself</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="pyFSRS.loadModules"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS.loadModules">[docs]</a>    <span class="k">def</span> <span class="nf">loadModules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load all modules that are available in subfolders of the folder *installed_modules*.</span>
+
+<span class="sd">        The names of the subfolders give the name of the category.</span>
+<span class="sd">        The names of the modules have to be equal to the name of the module&#39;s python file and the name of the class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">categories</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># load modules</span>
+        <span class="n">folders</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;installed_modules/*&quot;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+            <span class="n">catName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">c</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="nb">list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="s">&quot;/*.py&quot;</span><span class="p">))</span>
+
+            <span class="n">found</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">d</span>
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">d</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;__init__.py&quot;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">cll</span> <span class="o">=</span> <span class="n">core</span><span class="o">.</span><span class="n">FSRSModule</span><span class="o">.</span><span class="n">load_from_file</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+                        <span class="k">for</span> <span class="n">cl</span> <span class="ow">in</span> <span class="n">cll</span><span class="p">:</span>
+                            <span class="n">cl</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="n">catName</span>
+                            <span class="k">print</span> <span class="s">&quot;added module&quot;</span><span class="p">,</span> <span class="n">cl</span><span class="o">.</span><span class="n">name</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span> <span class="o">+</span> <span class="n">cll</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                        <span class="c"># pass    # ignore modules that cannot be loaded, e.g. due to missing libraries</span>
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">catName</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="pyFSRS.createUI"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS.createUI">[docs]</a>    <span class="k">def</span> <span class="nf">createUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create user interface according the the available modules.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># create a notebook widget to hold the different categories</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Notebook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span><span class="p">)</span>
+
+        <span class="c"># populate tree - create categories</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">categories</span><span class="p">:</span>
+
+            <span class="c"># create new FSRS module page</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="n">FSM</span><span class="o">.</span><span class="n">ModulePage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c"># add modules</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="n">c</span><span class="p">:</span>
+
+                    <span class="c"># create new module panel</span>
+                    <span class="n">mp</span> <span class="o">=</span> <span class="n">FSM</span><span class="o">.</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+                    <span class="c"># get widget pane to place the widgets</span>
+                    <span class="n">mpp</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">()</span>
+
+                    <span class="c"># for each module, create the properties and add to the widget panel</span>
+                    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+                        <span class="n">wnd</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">createHandle</span><span class="p">(</span><span class="n">mpp</span><span class="p">)</span>
+                        <span class="n">p</span><span class="o">.</span><span class="n">setLabelWnd</span><span class="p">(</span><span class="n">mp</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">getLabel</span><span class="p">(),</span> <span class="n">wnd</span><span class="o">=</span><span class="n">wnd</span><span class="p">))</span>
+
+                    <span class="c"># add panel to notebook page</span>
+                    <span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span>
+
+            <span class="c"># now add page to notebook</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">AddPage</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+        <span class="c"># some layouting</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+
+        <span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="n">sizer</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="pyFSRS.initializeModules"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS.initializeModules">[docs]</a>    <span class="k">def</span> <span class="nf">initializeModules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize available modules.</span>
+
+<span class="sd">        This function calls the `initialize` function of each module and passes along a list of all available modules, so that each module may be aware of its fellow modules.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">)</span>
+
+    <span class="c"># -------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c"># main events</span></div>
+<div class="viewcode-block" id="pyFSRS.onQuit"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS.onQuit">[docs]</a>    <span class="k">def</span> <span class="nf">onQuit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle quit events.</span>
+
+<span class="sd">        Asks each module if the program may quit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">CanVeto</span><span class="p">()</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">veto</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+                <span class="n">veto</span> <span class="o">=</span> <span class="n">veto</span> <span class="o">|</span> <span class="p">(</span><span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">canQuit</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">veto</span><span class="p">:</span>
+                <span class="n">event</span><span class="o">.</span><span class="n">StopPropagation</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">onExitApp</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">onExitApp</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="pyFSRS.onExitApp"><a class="viewcode-back" href="../pyfsrs.html#pyFSRS.pyFSRS.onExitApp">[docs]</a>    <span class="k">def</span> <span class="nf">onExitApp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function really quits the app.</span>
+
+<span class="sd">        Calls the `shutdown` function of each module to ensure a proper exit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">shutdown</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+    <span class="n">pyFSRS</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;pyFSRS - (c) D. Dietze, 2014-2016&quot;</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

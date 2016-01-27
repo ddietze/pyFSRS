@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>core.ModulePanel &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for core.ModulePanel</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module: ModulePanel</span>
+<span class="sd">   :platform: Windows</span>
+<span class="sd">.. moduleauthor:: Daniel R. Dietze &lt;daniel.dietze@berkeley.edu&gt;</span>
+
+<span class="sd">A ModulePage is a container widget that holds a variable number of ModulePanels.</span>
+<span class="sd">A ModulePanel is a customized collapsible wxPanel for displaying a list of labeled wxWidgets.</span>
+<span class="sd">While these two are mainly used for showing pyFSRS modules and their properties, the widgets</span>
+<span class="sd">can be used very general.</span>
+
+<span class="sd">Example usage::</span>
+
+<span class="sd">    import wx</span>
+<span class="sd">    from ModulePanel import *</span>
+
+<span class="sd">    # create wxPython app</span>
+<span class="sd">    app = wx.App()</span>
+<span class="sd">    frame = wx.Frame(None, title=&quot;pyFSRS - Test module panel&quot;)</span>
+<span class="sd">    frame.SetBackgroundColour(wx.Colour(255, 255, 255))</span>
+
+<span class="sd">    # create a new ModulePage</span>
+<span class="sd">    page = ModulePage(frame, -1)</span>
+
+<span class="sd">    # create ModulePanels and add them to ModulePage</span>
+<span class="sd">    pane1 = ModulePanel(page, -1, label=&quot;Module 1&quot;)</span>
+<span class="sd">    pane1.Add(&quot;some&quot;, &quot;text&quot;)</span>
+<span class="sd">    pane1.Add(&quot;Left&quot;, wx.TextCtrl(pane1.GetPane(), -1, &quot;Hallo Welt&quot;))</span>
+<span class="sd">    page.AddPanel(pane1)</span>
+
+<span class="sd">    pane2 = ModulePanel(page, -1, color=wx.Colour(0, 0, 255), label=&quot;Module 2&quot;)</span>
+<span class="sd">    pane2.Add(&quot;some&quot;, &quot;text&quot;)</span>
+<span class="sd">    pane2.Add(&quot;Left&quot;, wx.TextCtrl(pane2.GetPane(), -1, &quot;Hallo Welt&quot;))</span>
+<span class="sd">    page.AddPanel(pane2)</span>
+
+<span class="sd">    # this demonstrates how widgets can be added after creating the panel</span>
+<span class="sd">    page.GetPanel(page.AddPanel(ModulePanel(page, -1, label=&quot;Module 3&quot;))).Add(&quot;A&quot;, &quot;Line&quot;)</span>
+<span class="sd">    page.GetPanel(page.AddPanel(ModulePanel(page, -1, label=&quot;Module 4&quot;))).Add(&quot;B&quot;, &quot;Line&quot;)</span>
+<span class="sd">    page.GetPanel(page.AddPanel(ModulePanel(page, -1, label=&quot;Module 5&quot;))).Add(&quot;C&quot;, &quot;Line&quot;)</span>
+<span class="sd">    page.GetPanel(page.AddPanel(ModulePanel(page, -1, label=&quot;Module 6&quot;))).Add(&quot;D&quot;, &quot;Line&quot;)</span>
+
+<span class="sd">    # show the fram and run the app</span>
+<span class="sd">    frame.Show()</span>
+<span class="sd">    app.MainLoop()</span>
+
+
+<span class="sd">..</span>
+<span class="sd">   This file is part of the pyFSRS app.</span>
+
+<span class="sd">   This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">   it under the terms of the GNU General Public License as published by</span>
+<span class="sd">   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">   (at your option) any later version.</span>
+
+<span class="sd">   This program is distributed in the hope that it will be useful,</span>
+<span class="sd">   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">   GNU General Public License for more details.</span>
+
+<span class="sd">   You should have received a copy of the GNU General Public License</span>
+<span class="sd">   along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">   Copyright 2014-2016 Daniel Dietze &lt;daniel.dietze@berkeley.edu&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">wx.lib.newevent</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="n">PanelHideEvent</span><span class="p">,</span> <span class="n">EVT_PANEL_HIDE</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">newevent</span><span class="o">.</span><span class="n">NewEvent</span><span class="p">()</span>  <span class="c">#: event that is generated when one of the panels is resized</span>
+
+
+<span class="c"># panel main class</span>
+<div class="viewcode-block" id="ModulePanel"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel">[docs]</a><span class="k">class</span> <span class="nc">ModulePanel</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A collapsible wxPanel that is used to display FSRSModules and their properties.</span>
+<span class="sd">    This panel arranges child widgets row by row with a label printed in the left column and the actual widget displayed in the right column.</span>
+
+<span class="sd">    Accepts wxPanel&#39;s standard parameters. Especially</span>
+
+<span class="sd">        - *color*: wxColour that defines the color of the panel&#39;s frame. This value indirectly defines also the color of the title font. If it is a light color, the title is black, otherwise it is white.</span>
+<span class="sd">        - *bgcolor*: wxColour that defines the background color of the panel&#39;s interior.</span>
+<span class="sd">        - *label*: Title of the panel that appears on the top.</span>
+<span class="sd">        - *font*: wxFont for the panel&#39;s title and its children.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">clr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;color&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">bgclr</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;bgcolor&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="n">fnt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;font&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTFAMILY_SWISS</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTSTYLE_NORMAL</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">FONTWEIGHT_NORMAL</span><span class="p">,</span> <span class="bp">False</span><span class="p">))</span>
+        <span class="n">lbl</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&quot;label&quot;</span><span class="p">,</span> <span class="s">&quot;ModulePanel&quot;</span><span class="p">)</span>
+
+        <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetForegroundColour</span><span class="p">(</span><span class="n">clr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">bgclr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetFont</span><span class="p">(</span><span class="n">fnt</span><span class="p">)</span>
+
+        <span class="c"># expanded or not?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expanded</span> <span class="o">=</span> <span class="bp">True</span>        <span class="c">#: Expanded or not.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dfltCursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetCursor</span><span class="p">()</span>
+
+        <span class="c"># construct a set of spacers to achieve the correct spacing to the sides</span>
+        <span class="n">mainsizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="n">midsizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+
+        <span class="c"># this panel is put in between to enable hiding of the contents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># this is the central sizer, which layouts the widgets in two columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">FlexGridSizer</span><span class="p">(</span><span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hgap</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vgap</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span><span class="o">.</span><span class="n">AddGrowableCol</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># stack together</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span><span class="p">)</span>
+        <span class="n">midsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">mainsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">midsizer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="n">mainsizer</span><span class="p">)</span>
+
+        <span class="c"># event bindings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_ERASE_BACKGROUND</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onEraseBackground</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_SIZE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onResize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_LEFT_DOWN</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onLMouseDown</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_MOTION</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onMouseMove</span><span class="p">)</span>
+
+    <span class="c"># EVENTS</span>
+<div class="viewcode-block" id="ModulePanel.mouseInBtn"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.mouseInBtn">[docs]</a>    <span class="k">def</span> <span class="nf">mouseInBtn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns True if mouse hovers above the panel&#39;s title bar, which is used to collapse or uncollapse the panel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># get mouse position in window</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ScreenToClient</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">GetMousePosition</span><span class="p">())</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="ModulePanel.onMouseMove"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.onMouseMove">[docs]</a>    <span class="k">def</span> <span class="nf">onMouseMove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mouse move event handler that controls cursor appearance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseInBtn</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetCursor</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StockCursor</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">CURSOR_HAND</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetCursor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dfltCursor</span><span class="p">)</span>
+
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ModulePanel.onLMouseDown"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.onLMouseDown">[docs]</a>    <span class="k">def</span> <span class="nf">onLMouseDown</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mouse left-click event handler that controls collapsing or uncollapsing the panel.&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mouseInBtn</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Hide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expanded</span><span class="p">)</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="ModulePanel.onEraseBackground"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.onEraseBackground">[docs]</a>    <span class="k">def</span> <span class="nf">onEraseBackground</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This event is used to paint the panel&#39;s frame in the background.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># get paint dc</span>
+        <span class="n">dc</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">GetDC</span><span class="p">()</span>
+
+        <span class="c"># clear window</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetBackground</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Brush</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetBackgroundColour</span><span class="p">()))</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
+
+        <span class="n">dcwidth</span><span class="p">,</span> <span class="n">dcheight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetClientSize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dcwidth</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">dcheight</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c"># draw container</span>
+        <span class="n">clr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetForegroundColour</span><span class="p">()</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetBrush</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Brush</span><span class="p">(</span><span class="n">clr</span><span class="p">))</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetPen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">clr</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">DrawRoundedRectangle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dcwidth</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">DrawRectangle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dcwidth</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expanded</span><span class="p">:</span>
+            <span class="n">dc</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dcheight</span><span class="p">)</span>
+            <span class="n">dc</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="n">dcwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">dcwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dcheight</span><span class="p">)</span>
+            <span class="n">dc</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dcheight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dcwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dcheight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># write label and open/close button</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">clr</span><span class="o">.</span><span class="n">Red</span><span class="p">(),</span> <span class="n">clr</span><span class="o">.</span><span class="n">Green</span><span class="p">(),</span> <span class="n">clr</span><span class="o">.</span><span class="n">Blue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="o">+</span> <span class="n">g</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="mi">380</span><span class="p">:</span>
+            <span class="n">fclr</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fclr</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetPen</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Pen</span><span class="p">(</span><span class="n">fclr</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetBrush</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Brush</span><span class="p">(</span><span class="n">clr</span><span class="p">))</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetFont</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetFont</span><span class="p">()</span><span class="o">.</span><span class="n">Bold</span><span class="p">())</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetTextForeground</span><span class="p">(</span><span class="n">fclr</span><span class="p">)</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">SetTextBackground</span><span class="p">(</span><span class="n">clr</span><span class="p">)</span>
+
+        <span class="n">dc</span><span class="o">.</span><span class="n">DrawRectangle</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">expanded</span><span class="p">:</span>
+            <span class="n">dc</span><span class="o">.</span><span class="n">DrawLine</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+        <span class="n">lbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetLabel</span><span class="p">()</span>
+        <span class="n">txtW</span><span class="p">,</span> <span class="n">txtH</span> <span class="o">=</span> <span class="n">dc</span><span class="o">.</span><span class="n">GetTextExtent</span><span class="p">(</span><span class="n">lbl</span><span class="p">)</span>
+        <span class="n">dc</span><span class="o">.</span><span class="n">DrawText</span><span class="p">(</span><span class="n">lbl</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">txtH</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModulePanel.onResize"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.onResize">[docs]</a>    <span class="k">def</span> <span class="nf">onResize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle a resize by repainting the panel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Refresh</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span>
+
+    <span class="c"># MEMBER / LAYOUT FUNCTIONS</span>
+    <span class="c"># returns the main panel which is the panel that serves as parent for the child widgets</span></div>
+<div class="viewcode-block" id="ModulePanel.GetPanel"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.GetPanel">[docs]</a>    <span class="k">def</span> <span class="nf">GetPanel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the main panel, which serves as parent to the child widgets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span>
+
+    <span class="c"># add a widget to the panel</span>
+    <span class="c"># label is displayed in the left column</span>
+    <span class="c"># if wnd is a string, create a static text widget</span></div>
+<div class="viewcode-block" id="ModulePanel.Add"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.Add">[docs]</a>    <span class="k">def</span> <span class="nf">Add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">wnd</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a widget to the panel.</span>
+
+<span class="sd">        :param str label: Text / label to be displayed in the left column.</span>
+<span class="sd">        :param mixed wnd: Either wxWidget to be added in the right column or a string to be added as simple static text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_LEFT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wnd</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">wnd</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_RIGHT</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">centralsizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">wnd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">)</span>
+
+        <span class="n">pnsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="o">.</span><span class="n">GetSize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetMinSize</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">pnsize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">label</span>
+
+    <span class="c"># EXPAND / HIDE FUNCTIONS</span>
+
+    <span class="c"># call this function only after the main frame has been shown!</span></div>
+<div class="viewcode-block" id="ModulePanel.Hide"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePanel.Hide">[docs]</a>    <span class="k">def</span> <span class="nf">Hide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;(Un-) Hide the panel&#39;s content and (expand) shrink it to show its (full content) title bar when hide is (False) True.</span>
+<span class="sd">        Call this function only after the main frame has been initialized.</span>
+<span class="sd">        Emits a `PanelHideEvent` to notify other panels of its action.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expanded</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">hide</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mainpanel</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="ow">not</span> <span class="n">hide</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">hide</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetMaxSize</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetMaxSize</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span>
+
+            <span class="c"># Create the event</span>
+            <span class="n">evt</span> <span class="o">=</span> <span class="n">PanelHideEvent</span><span class="p">(</span><span class="n">panel</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="c"># Post the event</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">PostEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">GetParent</span><span class="p">()</span><span class="o">.</span><span class="n">Layout</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="ModulePage"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePage">[docs]</a><span class="k">class</span> <span class="nc">ModulePage</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Container widget holding a number of ModulePanels. Only one panel may be expanded at a time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">([</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)])</span>
+
+<div class="viewcode-block" id="ModulePage.AddPanel"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePage.AddPanel">[docs]</a>    <span class="k">def</span> <span class="nf">AddPanel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">panel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a ModulePanel.</span>
+
+<span class="sd">        :params ModulePanel panel: Panel which to add to the ModulePage.</span>
+<span class="sd">        :returns: Id of added panel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetNumPanels</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">panel</span><span class="o">.</span><span class="n">Hide</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">panel</span><span class="o">.</span><span class="n">SetForegroundColour</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">))</span>
+
+        <span class="n">panel</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">EVT_PANEL_HIDE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onPanelHide</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">panel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Layout</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">id</span>
+</div>
+<div class="viewcode-block" id="ModulePage.GetNumPanels"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePage.GetNumPanels">[docs]</a>    <span class="k">def</span> <span class="nf">GetNumPanels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns number of panels on this page.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModulePage.GetPanel"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePage.GetPanel">[docs]</a>    <span class="k">def</span> <span class="nf">GetPanel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the ModulePanel with given id.</span>
+
+<span class="sd">        :param int id: Id or index of panel to return.</span>
+<span class="sd">        :returns: Instance of ModulePanel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;ID is out of range!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="ModulePage.onPanelHide"><a class="viewcode-back" href="../../modulepanel.html#core.ModulePanel.ModulePage.onPanelHide">[docs]</a>    <span class="k">def</span> <span class="nf">onPanelHide</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Event handler to manage the exclusive expansion of a single panel at a time by closing all other panels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">panels</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">panel</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">Hide</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;pyFSRS - Test module panel&quot;</span><span class="p">)</span>
+    <span class="n">frame</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+
+    <span class="n">page</span> <span class="o">=</span> <span class="n">ModulePage</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">pane1</span> <span class="o">=</span> <span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 1&quot;</span><span class="p">)</span>
+    <span class="n">pane1</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">,</span> <span class="s">&quot;text&quot;</span><span class="p">)</span>
+    <span class="n">pane1</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Left&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="n">pane1</span><span class="o">.</span><span class="n">GetPane</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Hallo Welt&quot;</span><span class="p">))</span>
+
+    <span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">pane1</span><span class="p">)</span>
+
+    <span class="n">pane2</span> <span class="o">=</span> <span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 2&quot;</span><span class="p">)</span>
+    <span class="n">pane2</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">,</span> <span class="s">&quot;text&quot;</span><span class="p">)</span>
+    <span class="n">pane2</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Left&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="n">pane2</span><span class="o">.</span><span class="n">GetPane</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Hallo Welt&quot;</span><span class="p">))</span>
+
+    <span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">pane2</span><span class="p">)</span>
+
+    <span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 3&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+    <span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 4&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;B&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+    <span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 5&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;C&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+    <span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 6&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;D&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+    <span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+
+    <span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

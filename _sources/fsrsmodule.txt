@@ -1,0 +1,31 @@
+`FSRSModule`
+============
+
+Apart from the basic `FSRSModule` class detailed below, there exist some more specialized module classes
+that are especially interesting for extending pyFSRS:
+
+.. toctree::
+   :maxdepth: 1
+
+   minput
+   mcamera
+   moutput
+   maxis
+   mexperiment
+
+`FSRSModule.FSRSModule`
+-----------------------
+
+.. autoclass:: core.FSRSModule.FSRSModule
+    :members:
+    
+Utility and helper classes / functions
+--------------------------------------
+
+.. autofunction:: core.FSRSModule.load_from_file
+
+.. autoclass:: core.FSRSModule.ModProp
+    :members:
+
+.. autoclass:: core.FSRSModule.NumValidator
+    :members:

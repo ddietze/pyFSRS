@@ -1,0 +1,5 @@
+`FilePickerCtrl`
+================
+
+.. automodule:: core.FilePickerCtrl
+    :members:

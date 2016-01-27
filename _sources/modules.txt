@@ -1,0 +1,93 @@
+Shipped Modules
+===============
+
+In the following, I have assembled a short description of the provided modules along with their location.
+All of these are based on :py:mod:`core.FSRSModule` or its more specialized derivatives.
+
+Modules are activated by copying them from the folder `available_modules` into the folder `installed_modules` and restarting pyFSRS.
+Deactivation simply by deleting them again. You can have multiple copies of a module for different device instances, for example.
+**But keep in mind that each class has to have the same name as the file.**
+
+The `dummyXX` modules are a great starting point for new hardware modules.
+
+.. note:: The documentation of the modules is rather short and I am working on writing a more exhaustive documentation that also includes the module's properties and controls.
+
+`Devices.dummyAxis`
+-------------------
+
+.. automodule:: available_modules.Devices.dummyAxis
+
+`Devices.dummyCamera`
+---------------------
+
+.. automodule:: available_modules.Devices.dummyCamera
+
+`Devices.dummyDAQ`
+------------------
+
+.. automodule:: available_modules.Devices.dummyDAQ
+
+`Devices.dummyShutter`
+----------------------
+
+.. automodule:: available_modules.Devices.dummyShutter
+
+`Devices.Nanomotion`
+--------------------
+
+.. automodule:: available_modules.Devices.Nanomotion
+
+`Devices.NIShutter`
+-------------------
+
+.. automodule:: available_modules.Devices.NIShutter
+
+`Devices.NIShutterAO`
+---------------------
+
+.. automodule:: available_modules.Devices.NIShutterAO
+
+`Devices.NIStepper`
+-------------------
+
+.. automodule:: available_modules.Devices.NIStepper
+
+`Devices.PIXIS100`
+------------------
+
+.. automodule:: available_modules.Devices.PIXIS100
+
+`Devices.SR830`
+---------------
+
+.. automodule:: available_modules.Devices.SR830
+
+`xDAQ.DAQScan`
+--------------
+
+.. automodule:: available_modules.xDAQ.DAQScan
+
+`xDAQ.DAQStats`
+---------------
+
+.. automodule:: available_modules.xDAQ.DAQStats
+
+`xFSRS.FSRSAcquire`
+-------------------
+
+.. automodule:: available_modules.xFSRS.FSRSAcquire
+
+`xFSRS.FSRSFocus`
+-----------------
+
+.. automodule:: available_modules.xFSRS.FSRSFocus
+
+`xFSRS.FSRSScan`
+----------------
+
+.. automodule:: available_modules.xFSRS.FSRSScan
+
+`xFSRS.XCScan`
+--------------
+
+.. automodule:: available_modules.xFSRS.XCScan

@@ -1,0 +1,8 @@
+`FSRSModule.Eperiment`
+======================
+
+.. autoclass:: core.FSRSModule.Experiment
+    :members:
+    
+.. autoclass:: core.FSRSModule.ExperimentThread
+    :members:

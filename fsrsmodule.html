@@ -1,0 +1,478 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSRSModule &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="next" title="FSRSModule.Input" href="minput.html" />
+    <link rel="prev" title="FilePickerCtrl" href="filepickerctrl.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="minput.html" title="FSRSModule.Input"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="filepickerctrl.html" title="FilePickerCtrl"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" accesskey="U">Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fsrsmodule">
+<h1><cite>FSRSModule</cite><a class="headerlink" href="#fsrsmodule" title="Permalink to this headline">¶</a></h1>
+<p>Apart from the basic <cite>FSRSModule</cite> class detailed below, there exist some more specialized module classes
+that are especially interesting for extending pyFSRS:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="minput.html"><cite>FSRSModule.Input</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="mcamera.html"><cite>FSRSModule.Camera</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="moutput.html"><cite>FSRSModule.Output</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="maxis.html"><cite>FSRSModule.Axis</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="mexperiment.html"><cite>FSRSModule.Eperiment</cite></a></li>
+</ul>
+</div>
+<div class="section" id="fsrsmodule-fsrsmodule">
+<h2><cite>FSRSModule.FSRSModule</cite><a class="headerlink" href="#fsrsmodule-fsrsmodule" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="core.FSRSModule.FSRSModule">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">FSRSModule</code><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for pyFSRS modules - all devices, experiments, and general settings objects have to be derived from this class.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are a number of specialized subclasses for input and output devices, stages, experimental controls, etc. which define the necessary interface functions and new modules should be derived from those instead.</p>
+</div>
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.addProperty">
+<code class="descname">addProperty</code><span class="sig-paren">(</span><em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.addProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.addProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a property to the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prop</strong> (<a class="reference internal" href="#core.FSRSModule.ModProp" title="core.FSRSModule.ModProp"><em>ModProp</em></a>) &#8211; Instance of ModProp containing the property to be added.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Id (= index) of added property.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.canQuit">
+<code class="descname">canQuit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.canQuit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.canQuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called by the pyFSRS app when the user requests to close the program.
+If this module is ok with leaving, return True, otherwise return False. For instance, when a scan is still running
+this would be the right time to ask whether the user really wants to quit.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function should be overwritten by any derived FSRSModule to perform the module specific shutdown steps.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.FSRSModule.FSRSModule.category">
+<code class="descname">category</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.FSRSModule.category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Category of the module; used by the main app for sorting.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.freezeUI">
+<code class="descname">freezeUI</code><span class="sig-paren">(</span><em>freeze=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.freezeUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.freezeUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable of disable the user interface, i.e. all property widgets when freeze is False or True.
+This function is handy to block the user from messing with parameters during a scan, for example.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.getProperty">
+<code class="descname">getProperty</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.getProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.getProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the property with given id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.getPropertyByLabel">
+<code class="descname">getPropertyByLabel</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.getPropertyByLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.getPropertyByLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extremely useful function that returns the property whose label matches <cite>label</cite>.
+It is sufficient if the property label contains the string <cite>label</cite> irrespective of upper or lowercase lettering.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.hasProperty">
+<code class="descname">hasProperty</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.hasProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.hasProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if a property width the given label exists.
+It is sufficient if the property label contains the string <cite>label</cite> irrespective of upper or lowercase lettering.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><em>others=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Startup handler called by the pyFSRS app after all modules have been loaded.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function should be overwritten by any derived FSRSModule to perform the module specific initialization steps.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>others</strong> (<em>list</em>) &#8211; A list of all loaded and available FSRSModules. Use this to a) check how many instances of this module have been loaded already and b) make connections to available hardware, for instance.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Number of modules of the same type that are already in the list.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.FSRSModule.FSRSModule.name">
+<code class="descname">name</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.FSRSModule.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the module as it appears in the treectrl.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.parsePropertiesDict">
+<code class="descname">parsePropertiesDict</code><span class="sig-paren">(</span><em>dct</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.parsePropertiesDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.parsePropertiesDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of properties directly by parsing a list of python dictionaries defining those properties.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dct</strong> (<em>list</em>) &#8211; Python list of dictionaries defining the properties.</td>
+</tr>
+</tbody>
+</table>
+<p>Required keys are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>label</em>: Name of the property.</li>
+<li><em>type</em>: Type of the property (<cite>label</cite>, <cite>input</cite>, <cite>choice</cite>, <cite>button</cite>, <cite>checkbox</cite>, <cite>progress</cite>, <cite>file</cite>, <cite>toggle</cite>, and <cite>spin</cite>).</li>
+<li><em>value</em>: Initial value of the property according to its type.</li>
+<li><em>choices</em>: If type=&#8217;choice&#8217;, a list of choice strings has to be given.</li>
+</ul>
+</div></blockquote>
+<p>If type is &#8216;file&#8217;, &#8216;toggle&#8217;, &#8216;spin&#8217;, or &#8216;input&#8217;, also the <em>info</em>-key should to be present:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>file</em>: <cite>info</cite> = &#8216;open&#8217; / &#8216;save&#8217; / &#8216;path&#8217;</li>
+<li><em>toggle</em>: <cite>info</cite> = label of control element to be displayed next to the checkbox.</li>
+<li><em>spin</em>: <cite>info</cite> = (min, max)-tuple for spin control limits</li>
+<li><em>input</em>: <cite>info</cite> = allowed data type &#8216;float&#8217; / &#8216;int&#8217; / &#8216;str&#8217; (or empty)</li>
+</ul>
+</div></blockquote>
+<p>An event handler may be given by its function name within the same module and passed along with the <em>event</em>-key.</p>
+<p>Window handles are not parsed and will be populated automatically by <cite>initialize</cite>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.FSRSModule.FSRSModule.properties">
+<code class="descname">properties</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.FSRSModule.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of property entries, each entry is one line in the treectrl.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.FSRSModule.FSRSModule.propindex">
+<code class="descname">propindex</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.FSRSModule.propindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary containing a mapping from label to index - created on the go.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.setProperty">
+<code class="descname">setProperty</code><span class="sig-paren">(</span><em>id</em>, <em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.setProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.setProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set / overwrite an existing property of the module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>int</em>) &#8211; (= index) of added property.</li>
+<li><strong>prop</strong> (<a class="reference internal" href="#core.FSRSModule.ModProp" title="core.FSRSModule.ModProp"><em>ModProp</em></a>) &#8211; Instance of ModProp containing the new property.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.FSRSModule.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#FSRSModule.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.FSRSModule.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is called by the pyFSRS app when the program is about to close. At this point, no veto is possible.
+Use this function to perform the necessary steps for a safe exit, like close connections to libraries or moving any stages to
+their initial positions, and so on.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function should be overwritten by any derived FSRSModule to perform the module specific shutdown steps.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.FSRSModule.FSRSModule.type">
+<code class="descname">type</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.FSRSModule.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of module (&#8216;input&#8217;, &#8216;output&#8217;, &#8216;axis&#8217;, &#8216;experiment&#8217;).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="utility-and-helper-classes-functions">
+<h2>Utility and helper classes / functions<a class="headerlink" href="#utility-and-helper-classes-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="core.FSRSModule.load_from_file">
+<code class="descclassname">core.FSRSModule.</code><code class="descname">load_from_file</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#load_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.load_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dynamically load a FSRSModule given by <cite>filepath</cite> and try to return an instance of
+the module class. The module class has to have the identical name as the file!</p>
+<p>If the module provides a <cite>howMany</cite> function, this function initiates the necessary number of
+class instances and returns them as a list.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function is not limited to FSRSModules but can be used to dynamically import any python module.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> (<em>str</em>) &#8211; Filename of the module to load including the file extension (.pyc or .py).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of module class instances or None if no class could be found.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="core.FSRSModule.ModProp">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">ModProp</code><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for a property element associated with a FSRSModule.</p>
+<p>A property has a name, a type, some value, a window handle to its control widget, an event handler and additional infos.
+Currently supported types are <cite>label</cite>, <cite>input</cite>, <cite>choice</cite>, <cite>button</cite>, <cite>checkbox</cite>, <cite>progress</cite>, <cite>file</cite>, <cite>toggle</cite>, and <cite>spin</cite>.
+Additional infos are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>file</em>: <cite>info</cite> = &#8216;open&#8217; / &#8216;save&#8217; / &#8216;path&#8217;</li>
+<li><em>toggle</em>: <cite>info</cite> = label of control element to be displayed next to the checkbox.</li>
+<li><em>spin</em>: <cite>info</cite> = (min, max)-tuple for spin control limits</li>
+<li><em>input</em>: <cite>info</cite> = allowed data type &#8216;float&#8217; / &#8216;int&#8217; / &#8216;str&#8217; (or empty)</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.createHandle">
+<code class="descname">createHandle</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.createHandle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.createHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return the wxWidget corresponding to the property type and attach to parent. <cite>parent</cite> is the wxTreeCtrl instance
+that holds the widgets. If an event handler is given, the correct binding is also created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.freezeUI">
+<code class="descname">freezeUI</code><span class="sig-paren">(</span><em>freeze=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.freezeUI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.freezeUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable the user interface, i.e., the associated wxWidget when freeze is False or True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getChoices">
+<code class="descname">getChoices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getChoices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getChoices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns choices.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getEvent">
+<code class="descname">getEvent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the event handler function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getHandle">
+<code class="descname">getHandle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getHandle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns handle to widget, i.e., the wx control element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getInfo">
+<code class="descname">getInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return info field.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getLabel">
+<code class="descname">getLabel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return label.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getType">
+<code class="descname">getType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.getValue">
+<code class="descname">getValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.getValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.getValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current property value. If a window handle exists, the property value is directly
+read out from that widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setChoices">
+<code class="descname">setChoices</code><span class="sig-paren">(</span><em>ch=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setChoices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setChoices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set list of choices. Accepts a python list as argument.
+If a widget is attached to the property, the list of choices of the wxChoice box is
+also updated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setEvent">
+<code class="descname">setEvent</code><span class="sig-paren">(</span><em>evt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setEvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set event handler. <cite>evt</cite> is either a python function or None to disable the event handler.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setHandle">
+<code class="descname">setHandle</code><span class="sig-paren">(</span><em>hndl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setHandle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set window handle. <cite>hndl</cite> has to be a valid wxWidget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setInfo">
+<code class="descname">setInfo</code><span class="sig-paren">(</span><em>info=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the info field according to the type of property.
+For some types (&#8216;file&#8217; and &#8216;input&#8217;), this variable defines the appearance of the widgets and therefore has to be
+changed before the window handle is created.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setLabel">
+<code class="descname">setLabel</code><span class="sig-paren">(</span><em>txt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setLabel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set label of property. Also updates labelwnd.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setType">
+<code class="descname">setType</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set property type.</p>
+<p>Allowed values are &#8216;label&#8217;, &#8216;input&#8217;, &#8216;choice&#8217;, &#8216;button&#8217;, &#8216;checkbox&#8217;, &#8216;toggle&#8217;, &#8216;file&#8217;, &#8216;progress&#8217;, and &#8216;spin&#8217;.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ModProp.setValue">
+<code class="descname">setValue</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ModProp.setValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ModProp.setValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set property value.</p>
+<p>Performs a rough sanity check depending on the type of property. If a widget is attached,
+also the value displayed in the widget is updated.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="core.FSRSModule.NumValidator">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">NumValidator</code><span class="sig-paren">(</span><em>type='float'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#NumValidator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.NumValidator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom text control validator to be used internally with text inputs for numerical values.
+The validator test for conversion of the entered string into the desired numerical or string data type. If it fails,
+it displays a messge box asking the user to correct his input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>type</strong> (<em>str</em>) &#8211; Type of allowed input (&#8216;float&#8217; = default, &#8216;int&#8217;, &#8216;str&#8217;).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="minput.html" title="FSRSModule.Input"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="filepickerctrl.html" title="FilePickerCtrl"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

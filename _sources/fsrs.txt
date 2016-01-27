@@ -1,0 +1,25 @@
+What is FSRS?
+=============
+
+"Femtosecond stimulated Raman spectroscopy (FSRS) is an ultrafast nonlinear optical 
+technique that provides vibrational structural information with high temporal (sub-50 fs)
+precision and high spectral (sub-10 cm−1) resolution. Since the first full demonstration
+of its capabilities approximately 15 years ago, FSRS has evolved into a mature technique
+giving deep insights into chemical and biochemical reaction dynamics that would be
+inaccessible with any other technique. It is now being routinely applied to virtually
+all possible photochemical reactions and systems spanning from single molecules in
+solution to thin-films, bulk crystals and macromolecular proteins.
+
+Traditionally, FSRS is a three-pulse experiment. An actinic pump pulse excites the
+molecule in the usual way and initiates the photochemical reaction. The instantaneous
+structure of the molecule, represented by its Raman spectrum, is then read out at
+various time delays by a sequence of a narrowband Raman pump pulse and a broadband
+probe pulse. The latter creates a macroscopic polarization with high time precision
+giving rise to a free induction decay, which is measured with high energy resolution
+by a dispersed detection system." (Dietze and Mathies, in preparation)
+
+If you are interested in the technique and its technology, I recommend the
+following two papers as a starting point:
+
+    * McCamant et al., *Appl. Spectrosc.* **57**, 1317 (2003).
+    * McCamant et al., *Rev. Sci. Instrum.* **75**, 4971 (2004).

@@ -1,0 +1,54 @@
+.. pyFSRS documentation master file, created by
+   sphinx-quickstart on Thu Jan 14 16:35:09 2016.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+pyFSRS - femtosecond stimulated Raman experiments made easy!
+============================================================
+
+pyFSRS is a modular GUI for pump-probe-type optical experiments, specialized for
+femtosecond stimulated Raman spectroscopy and transient-absorption spectroscopy.
+However, it is not limited to these two applications and can be directly used for
+any other pump-probe experiment without modification.
+
+.. figure:: screenshot.png
+   :width: 640px
+   :align: center
+
+   Screenshot of the pyFSRS main window and a plot window used for cross-correlation measurements.
+
+The architecture of the program is modular and open, so that anyone can modify it according
+to his/her needs.
+
+.. note:: The documentation currently is somewhat rudimentary and I am continuously working on improving it.. Please bare with me :)
+
+Contents
+========
+
+.. toctree::
+   :maxdepth: 1
+
+   fsrs
+   install
+   modules
+   extending
+   coremodules
+
+
+Licence
+=======
+
+   This program is free software: you can redistribute and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   Copyright 2014-2016 Daniel Dietze <daniel.dietze@berkeley.edu>.

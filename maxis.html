@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSRSModule.Axis &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="FSRSModule" href="fsrsmodule.html" />
+    <link rel="next" title="FSRSModule.Eperiment" href="mexperiment.html" />
+    <link rel="prev" title="FSRSModule.Output" href="moutput.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mexperiment.html" title="FSRSModule.Eperiment"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="moutput.html" title="FSRSModule.Output"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="fsrsmodule.html" accesskey="U"><cite>FSRSModule</cite></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fsrsmodule-axis">
+<h1><cite>FSRSModule.Axis</cite><a class="headerlink" href="#fsrsmodule-axis" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="core.FSRSModule.Axis">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">Axis</code><a class="reference internal" href="_modules/core/FSRSModule.html#Axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for any axis or stage device.</p>
+<dl class="method">
+<dt id="core.FSRSModule.Axis.goto">
+<code class="descname">goto</code><span class="sig-paren">(</span><em>pos</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Axis.goto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Axis.goto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Go to specified position.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function has to be overwritten by any derived motor class to implement the device specific code.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Axis.is_moving">
+<code class="descname">is_moving</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Axis.is_moving"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Axis.is_moving" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if stage is moving, otherwise False.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function has to be overwritten by any derived motor class to implement the device specific code.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Axis.pos">
+<code class="descname">pos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Axis.pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Axis.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return current position.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function has to be overwritten by any derived motor class to implement the device specific code.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mexperiment.html" title="FSRSModule.Eperiment"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="moutput.html" title="FSRSModule.Output"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="fsrsmodule.html" ><cite>FSRSModule</cite></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

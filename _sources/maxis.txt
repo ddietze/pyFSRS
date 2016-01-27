@@ -1,0 +1,5 @@
+`FSRSModule.Axis`
+=================
+
+.. autoclass:: core.FSRSModule.Axis
+    :members:    

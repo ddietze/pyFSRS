@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Shipped Modules &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="next" title="Extending pyFSRS" href="extending.html" />
+    <link rel="prev" title="Installing pyFSRS" href="install.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="Extending pyFSRS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing pyFSRS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="shipped-modules">
+<h1>Shipped Modules<a class="headerlink" href="#shipped-modules" title="Permalink to this headline">¶</a></h1>
+<p>In the following, I have assembled a short description of the provided modules along with their location.
+All of these are based on <code class="xref py py-mod docutils literal"><span class="pre">core.FSRSModule</span></code> or its more specialized derivatives.</p>
+<p>Modules are activated by copying them from the folder <cite>available_modules</cite> into the folder <cite>installed_modules</cite> and restarting pyFSRS.
+Deactivation simply by deleting them again. You can have multiple copies of a module for different device instances, for example.
+<strong>But keep in mind that each class has to have the same name as the file.</strong></p>
+<p>The <cite>dummyXX</cite> modules are a great starting point for new hardware modules.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The documentation of the modules is rather short and I am working on writing a more exhaustive documentation that also includes the module&#8217;s properties and controls.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.dummyAxis">
+<span id="devices-dummyaxis"></span><h2><cite>Devices.dummyAxis</cite><a class="headerlink" href="#module-available_modules.Devices.dummyAxis" title="Permalink to this headline">¶</a></h2>
+<p>dummyAxis provides a dummy axis device for testing purposes.
+You can use this file as a starting point when writing your own axis device module for pyFSRS.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.dummyCamera">
+<span id="devices-dummycamera"></span><h2><cite>Devices.dummyCamera</cite><a class="headerlink" href="#module-available_modules.Devices.dummyCamera" title="Permalink to this headline">¶</a></h2>
+<p>dummyCamera provides a dummy camera device for testing purposes.
+You can use this file as a starting point when writing your own camera device module for pyFSRS.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.dummyDAQ">
+<span id="devices-dummydaq"></span><h2><cite>Devices.dummyDAQ</cite><a class="headerlink" href="#module-available_modules.Devices.dummyDAQ" title="Permalink to this headline">¶</a></h2>
+<p>dummyDAQ provides a dummy input device for testing purposes.
+You can use this file as a starting point when writing your own input device module for pyFSRS.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.dummyShutter">
+<span id="devices-dummyshutter"></span><h2><cite>Devices.dummyShutter</cite><a class="headerlink" href="#module-available_modules.Devices.dummyShutter" title="Permalink to this headline">¶</a></h2>
+<p>dummyShutter provides a dummy output device for testing purposes, in this case a digital output.
+You can use this file as a starting point when writing your own output device module for pyFSRS.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.Nanomotion">
+<span id="devices-nanomotion"></span><h2><cite>Devices.Nanomotion</cite><a class="headerlink" href="#module-available_modules.Devices.Nanomotion" title="Permalink to this headline">¶</a></h2>
+<p>Nanomotion provides a pyFSRS axis module for the Melles Griot NanoMover II.</p>
+<p>It is assumed that the axis is used for a single pass optical delay stage and, therefore, positions are in fs.
+This setting can easily be changed and adapted to individual needs by changing the value of <cite>self.fs2mm</cite>.</p>
+<p>Only the first attached controller is used at the moment. Multiple controllers could be supported by implementing the <cite>howMany</cite> function.
+However, multiple axes per controller are supported. Individual axes can be selected through a choice box. Only the active axis can be moved by external modules.</p>
+<p>On startup, all motors are initialized and unparked. The current position is set to self.home (default: -3000.0 fs).
+The axis then moves to 0.0. When decive is disconnected, all motors go to self.home and park.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.NIShutter">
+<span id="devices-nishutter"></span><h2><cite>Devices.NIShutter</cite><a class="headerlink" href="#module-available_modules.Devices.NIShutter" title="Permalink to this headline">¶</a></h2>
+<p>NIShutter provides a <strong>digital</strong> output module for controlling optical shutters based on PyDAQmx.
+It opens the device specified by the address in its shutter-property, which is hardcoded in the module.
+If you would like to use several independent shutters or digital outputs, copy and rename this module and file.</p>
+<p>Does not change the initial value of the outputs upon startup.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.NIShutterAO">
+<span id="devices-nishutterao"></span><h2><cite>Devices.NIShutterAO</cite><a class="headerlink" href="#module-available_modules.Devices.NIShutterAO" title="Permalink to this headline">¶</a></h2>
+<p>NIShutterAO provides an <strong>analog</strong> output module for controlling optical shutters based on PyDAQmx.
+It sends 0 / 5 V to the output to signal LOW / HIGH state. Currently, only channels ao0 and ao1 are supported
+but this can be changed easily in the code.
+It opens the device specified by the address in its shutter-property, which is hardcoded in the module.
+If you would like to use several independent shutters or digital outputs, copy and rename this module and file.</p>
+<p>Sets all analog out channels (ao0, ao1) to 0V at startup.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.NIStepper">
+<span id="devices-nistepper"></span><h2><cite>Devices.NIStepper</cite><a class="headerlink" href="#module-available_modules.Devices.NIStepper" title="Permalink to this headline">¶</a></h2>
+<p>NIStepper provides an axis module for 4-coil stepper motors controlled by a Darlington array and a National Instruments DAQ board through pyDAQmx.
+The hardware settings and a variable number of motors are setup through self.motors.
+Motor positions are in units of (micro-) steps. If you want to change this behaviour, change the value of <cite>self.units2steps</cite> and the type of the target from <cite>int</cite> to <cite>float</cite>.</p>
+<p>Upon startup, all channels are set to LOW, i.e., no current. The same is true in between steps to minimize current flow and heat load.
+As a consequence, the motors should only be used for applications where they do not have to hold something against external forces, e.g., gravity.
+If you require this option, you have to disable all calls to <cite>self.Ioff</cite>, except the one in <cite>self.shutdown</cite>.</p>
+<p>Non-blocking axis movement is provided by a specialized class derived from threading.Thread.</p>
+<p>It supports the following general stepping sequences:</p>
+<div class="section" id="normal">
+<h3>normal:<a class="headerlink" href="#normal" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head" colspan="4">Channels</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="hightq">
+<h3>highTQ:<a class="headerlink" href="#hightq" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head" colspan="4">Channels</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="halfstep">
+<h3>halfstep:<a class="headerlink" href="#halfstep" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Step</th>
+<th class="head" colspan="4">Channels</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="module-available_modules.Devices.PIXIS100">
+<span id="devices-pixis100"></span><h2><cite>Devices.PIXIS100</cite><a class="headerlink" href="#module-available_modules.Devices.PIXIS100" title="Permalink to this headline">¶</a></h2>
+<p>Camera module for PrincetonInstrument&#8217;s PICam compatible cameras.
+Currently, only the first attached camera is used.</p>
+<p>This module is optimized for a PIXIS100 with a 1340 x 100 pixel sensor chip. If you are using a different camera, you have to go through the code and adapt it where necessary.</p>
+</div>
+<div class="section" id="module-available_modules.Devices.SR830">
+<span id="devices-sr830"></span><h2><cite>Devices.SR830</cite><a class="headerlink" href="#module-available_modules.Devices.SR830" title="Permalink to this headline">¶</a></h2>
+<p>SR830 provides support for the Stanford SR830 Lock-In through pyVISA.
+Iterates through all connected GPIB devices and adds a module for each SR830 that has been found.</p>
+</div>
+<div class="section" id="module-available_modules.xDAQ.DAQScan">
+<span id="xdaq-daqscan"></span><h2><cite>xDAQ.DAQScan</cite><a class="headerlink" href="#module-available_modules.xDAQ.DAQScan" title="Permalink to this headline">¶</a></h2>
+<p>DAQScan provides a module for reading a single value, e.g., from a lock-in, as function of optical delay time (=stage position).
+Data may be saved as a TAB-delimited two-column ASCII file (time, value).</p>
+</div>
+<div class="section" id="module-available_modules.xDAQ.DAQStats">
+<span id="xdaq-daqstats"></span><h2><cite>xDAQ.DAQStats</cite><a class="headerlink" href="#module-available_modules.xDAQ.DAQStats" title="Permalink to this headline">¶</a></h2>
+<p>DAQStast reads N samples from an input device and displays statistics.
+Data may be saved as a TAB-delimited two-column ASCII file (time, value).</p>
+</div>
+<div class="section" id="module-available_modules.xFSRS.FSRSAcquire">
+<span id="xfsrs-fsrsacquire"></span><h2><cite>xFSRS.FSRSAcquire</cite><a class="headerlink" href="#module-available_modules.xFSRS.FSRSAcquire" title="Permalink to this headline">¶</a></h2>
+<p>FSRSAcquire reads N frames from the camera and displays the results. Supports dT/T, TA and FSRS modes.
+Allows to acquire M sets of data. The final result will be the average over the M sets, i.e., effectively NxM frames.
+Each set is in addition saved as an individual file.
+Data are saved as TAB-delimited three-column ASCII files (A, B, C), where column B is pump-off, C pump-on (or vice versa) and column
+A is either B/C, -log10(B/C) or -log(B/C) depending on measurement mode.</p>
+</div>
+<div class="section" id="module-available_modules.xFSRS.FSRSFocus">
+<span id="xfsrs-fsrsfocus"></span><h2><cite>xFSRS.FSRSFocus</cite><a class="headerlink" href="#module-available_modules.xFSRS.FSRSFocus" title="Permalink to this headline">¶</a></h2>
+<p>FSRSFocus reads N frames from the camera and displays the results as a live stream. Great for alignment purposes. Supports dT/T, TA and FSRS modes.
+Data cannot be saved, use &#8216;FSRSAcquire&#8217; or &#8216;FSFSScan&#8217; instead.</p>
+</div>
+<div class="section" id="module-available_modules.xFSRS.FSRSScan">
+<span id="xfsrs-fsrsscan"></span><h2><cite>xFSRS.FSRSScan</cite><a class="headerlink" href="#module-available_modules.xFSRS.FSRSScan" title="Permalink to this headline">¶</a></h2>
+<p>FSRSScan reads a series of ground state / excited state FSRS spectra. Supports also dT/T, TA and FSRS modes.
+Allows to acquire M sets of data. The final result will be the average over the M sets, i.e., effectively NxM frames.
+Each set and timestep is saved as an individual file. Data are saved as TAB-delimited three-column ASCII files (A, B, C), where column B is pump-off, C pump-on (or vice versa) and column
+A is either B/C, -log10(B/C) or -log(B/C) depending on measurement mode. File names follow the historical Mathies lab convention.</p>
+<p>Allows also to simultaneously measure a reference signal, e.g., the actinic pump power from a photodiode using some specified input device.
+This reference will be saved individually as a TAB-delimited two-column ASCII file (time, value).</p>
+</div>
+<div class="section" id="module-available_modules.xFSRS.XCScan">
+<span id="xfsrs-xcscan"></span><h2><cite>xFSRS.XCScan</cite><a class="headerlink" href="#module-available_modules.xFSRS.XCScan" title="Permalink to this headline">¶</a></h2>
+<p>Measure a 2D contour map consisting of camera signal vs delay time. Can be used to measure Kerr cross-correlation,
+TA-maps, FSRS-maps or dT/T-maps. Allows fitting of the data columnwise to a Gaussian to determine probe chirp and IRF.
+Data are saved as TAB-delimited (N+1)-column ASCII files (time, N-frequency columns), where the frequency columns
+depend on the measurement mode.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="Extending pyFSRS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installing pyFSRS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

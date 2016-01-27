@@ -1,0 +1,16 @@
+Description of Core Modules
+===========================
+
+The following list gives a more detailed description of the core modules and the provided functions.
+It is intended for people who would like to extend pyFSRS with their own modules.
+
+.. toctree::
+   :maxdepth: 1
+
+   pyfsrs
+   filepickerctrl
+   fsrsmodule
+   fsrsplot
+   fsrsutils
+   modulepanel
+   

@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>core.FilePickerCtrl &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for core.FilePickerCtrl</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module: FilePickerCtrl</span>
+<span class="sd">   :platform: Windows</span>
+<span class="sd">.. moduleauthor:: Daniel R. Dietze &lt;daniel.dietze@berkeley.edu&gt;</span>
+
+<span class="sd">A simple file and path picker widget consisting of a text field and a button.</span>
+
+<span class="sd">..</span>
+<span class="sd">   This file is part of the pyFSRS app.</span>
+
+<span class="sd">   This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">   it under the terms of the GNU General Public License as published by</span>
+<span class="sd">   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">   (at your option) any later version.</span>
+
+<span class="sd">   This program is distributed in the hope that it will be useful,</span>
+<span class="sd">   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">   GNU General Public License for more details.</span>
+
+<span class="sd">   You should have received a copy of the GNU General Public License</span>
+<span class="sd">   along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">   Copyright 2014-2016 Daniel Dietze &lt;daniel.dietze@berkeley.edu&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">wx.lib.newevent</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">FileSelectEvent</span><span class="p">,</span> <span class="n">EVT_FILE_SELECT</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">newevent</span><span class="o">.</span><span class="n">NewEvent</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="FilePickerCtrl"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl">[docs]</a><span class="k">class</span> <span class="nc">FilePickerCtrl</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;FilePickerCtrl is a simple file picker widget for wxPython consisting of a text-field and a</span>
+<span class="sd">    &#39;select file&#39;-button.</span>
+
+<span class="sd">    :param wxWindow parent: Parent window.</span>
+<span class="sd">    :param int id: Widget it (default=-1).</span>
+<span class="sd">    :param str startDir: Initial directory to display in search dialog (default=&#39;&#39; for current).</span>
+<span class="sd">    :param str mode: Type of dialog (&#39;open&#39;, &#39;save&#39;, &#39;path&#39; = default).</span>
+<span class="sd">    :param kwargs: Other parameters that are passed on to the wxPanel constructor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">startDir</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">startDir</span> <span class="o">=</span> <span class="n">startDir</span>
+
+        <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;open&quot;</span><span class="p">,</span> <span class="s">&quot;save&quot;</span><span class="p">,</span> <span class="s">&quot;path&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Mode must be &#39;path&#39;, &#39;open&#39; or &#39;save&#39;!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&quot;open&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">OPEN</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dlgt</span> <span class="o">=</span> <span class="s">&quot;Choose file to open..&quot;</span>
+        <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s">&quot;save&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">SAVE</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dlgt</span> <span class="o">=</span> <span class="s">&quot;Choose file to save..&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dlgt</span> <span class="o">=</span> <span class="s">&quot;Choose path..&quot;</span>
+
+        <span class="c"># create widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rborder</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">outersizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">HORIZONTAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;...&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">BU_EXACTFIT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outersizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rborder</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outersizer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetAutoLayout</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s">&#39;size&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetSize</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;size&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">onBrowse</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="FilePickerCtrl.GetSize"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.GetSize">[docs]</a>    <span class="k">def</span> <span class="nf">GetSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return wxSize-object containing widget dimensions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">GetSize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wx</span><span class="o">.</span><span class="n">Size</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rborder</span><span class="p">,</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.SetSize"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.SetSize">[docs]</a>    <span class="k">def</span> <span class="nf">SetSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set widget size.</span>
+
+<span class="sd">        :param mixed w: Width in pixel if h is not None. Otherwise tuple containing width and height.</span>
+<span class="sd">        :param int h: Height in pixel (default=None).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">SetSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rborder</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">Panel</span><span class="o">.</span><span class="n">SetSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rborder</span><span class="p">,</span> <span class="n">h</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.GetValue"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.GetValue">[docs]</a>    <span class="k">def</span> <span class="nf">GetValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return selected path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.SetValue"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.SetValue">[docs]</a>    <span class="k">def</span> <span class="nf">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set current path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.Enable"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.Enable">[docs]</a>    <span class="k">def</span> <span class="nf">Enable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable or disable widget when value is True (default) or False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.Disable"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.Disable">[docs]</a>    <span class="k">def</span> <span class="nf">Disable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Disable widget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="FilePickerCtrl.onBrowse"><a class="viewcode-back" href="../../filepickerctrl.html#core.FilePickerCtrl.FilePickerCtrl.onBrowse">[docs]</a>    <span class="k">def</span> <span class="nf">onBrowse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Handle the button click event by displaying a file or path dialog.</span>
+
+<span class="sd">        Emits a `FileSelectEvent` when the user clicks OK.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">current</span><span class="p">):</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">current</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">elif</span> <span class="n">directory</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">directory</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">directory</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startDir</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">DirDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlgt</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DD_DIR_MUST_EXIST</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">FileDialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dlgt</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">current</span><span class="p">,</span> <span class="s">&quot;*.*&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span> <span class="o">==</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">dlg</span><span class="o">.</span><span class="n">GetPath</span><span class="p">())</span>
+
+            <span class="c"># Create the event</span>
+            <span class="n">evt</span> <span class="o">=</span> <span class="n">FileSelectEvent</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
+
+            <span class="c"># Post the event</span>
+            <span class="n">wx</span><span class="o">.</span><span class="n">PostEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="p">)</span>
+
+        <span class="n">dlg</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

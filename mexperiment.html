@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSRSModule.Eperiment &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="FSRSModule" href="fsrsmodule.html" />
+    <link rel="next" title="FSRSPlot" href="fsrsplot.html" />
+    <link rel="prev" title="FSRSModule.Axis" href="maxis.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsplot.html" title="FSRSPlot"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="maxis.html" title="FSRSModule.Axis"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="fsrsmodule.html" accesskey="U"><cite>FSRSModule</cite></a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fsrsmodule-eperiment">
+<h1><cite>FSRSModule.Eperiment</cite><a class="headerlink" href="#fsrsmodule-eperiment" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="core.FSRSModule.Experiment">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">Experiment</code><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for any experiment control module. These are actually the heart of pyFSRS and control all experimental
+conditions as well as all attached hardware.</p>
+<p>When creating the properties, you should create a start/stop button with the label &#8220;Start&#8221;, which is used by the experiment control functions.</p>
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.canQuit">
+<code class="descname">canQuit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.canQuit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.canQuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shutdown handler that checks for a running measurement thread. If there is a scan running, it prompts the user to confirm aborting the scan before closing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><em>others=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save list of other modules to get access to hardware but also to be able to enable / disable those user interfaces during a scan.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function may be overwritten in your experiment class to implement some specific code but do not forget to store the list of other modules.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.onFinished">
+<code class="descname">onFinished</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.onFinished"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.onFinished" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler that gets called by the measurement thread once the scan has been finished.
+Waits for the thread to die, changes the start/stop-button label and reactivates the user interface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.onStarted">
+<code class="descname">onStarted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.onStarted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.onStarted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler that gets called by the measurement thread once it has started the scan.
+Blocks the user interface but keeps the stop-button alive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.onUpdate">
+<code class="descname">onUpdate</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.onUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.onUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler that gets called periodically by the measurement thread to send data or
+just status updates to the GUI.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function has to be overwritten in your derived experiment class to implement your specific code.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shutdown handler that kills the measurement thread and waits for it to die.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>thread</em>, <em>**argv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the measurement thread and deal with the button labels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>thread</strong> (<em>threading.Thread</em>) &#8211; An instance of the measurement thread class, which is a subclass of threading.Thread.</li>
+<li><strong>argv</strong> (<em>mixed</em>) &#8211; A list of parameters that are passed along to the measurement thread.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.Experiment.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#Experiment.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.Experiment.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the measurement by sending the stop signal to the thread.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="core.FSRSModule.ExperimentThread">
+<em class="property">class </em><code class="descclassname">core.FSRSModule.</code><code class="descname">ExperimentThread</code><span class="sig-paren">(</span><em>parent</em>, <em>**argv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ExperimentThread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ExperimentThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prototype for a measurement thread that may be used for the actual experiment. It is subclassed from
+<cite>threading.Thread</cite> and provides the same functionality. The thread is started by calling its <cite>start</cite>-function
+and stopped by calling its <cite>stop</cite>-function. The actual measurement routine is <cite>run</cite>, which has to be overwritten in
+your derived measurement thread.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Provide your own __init__ routine based on this one to handle the measurement parameters correctly.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>parent</strong> (<a class="reference internal" href="fsrsmodule.html#core.FSRSModule.FSRSModule" title="core.FSRSModule.FSRSModule"><em>FSRSModule.FSRSModule</em></a>) &#8211; Parent module whose event handlers are called by this measurement thread.</li>
+<li><strong>argv</strong> (<em>mixed</em>) &#8211; Additional arguments that are passed to the thread. These are essentially the parameters that control the experiment, like start and stop positions for the stage and number of frames to capture and so on.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="core.FSRSModule.ExperimentThread.canQuit">
+<code class="descname">canQuit</code><em class="property"> = None</em><a class="headerlink" href="#core.FSRSModule.ExperimentThread.canQuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>User stop event, handles also sleep-functionality.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ExperimentThread.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ExperimentThread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ExperimentThread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the actual scan routine.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This function has to be overwritten by your implementation to handle your specific code.</p>
+</div>
+<p>A rough prototype should look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c"># send started-event to GUI</span>
+    <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">onStarted</span><span class="p">)</span>
+
+    <span class="c"># enter main loop - iterate until canQuit is True</span>
+    <span class="k">while</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canQuit</span><span class="o">.</span><span class="n">isSet</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+
+        <span class="c"># put here your actual measurement protocol</span>
+        <span class="c"># stage move to here and there</span>
+        <span class="c"># wait for stage</span>
+        <span class="c"># read data</span>
+
+        <span class="c"># do not forget to send data or status information periodically to GUI</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">onUpdate</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="c"># send terminated-event to GUI</span>
+    <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">onFinished</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FSRSModule.ExperimentThread.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSModule.html#ExperimentThread.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSModule.ExperimentThread.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the thread by setting the threading.Event <cite>canQuit</cite> to True.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsplot.html" title="FSRSPlot"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="maxis.html" title="FSRSModule.Axis"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="fsrsmodule.html" ><cite>FSRSModule</cite></a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

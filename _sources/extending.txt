@@ -1,0 +1,34 @@
+Extending pyFSRS
+================
+
+The pyFSRS GUI is fully modular, i.e., all devices and measurement modi are incorporated as modules
+that are loaded dynamically at startup. Therefore, extending pyFSRS is as easy as creating a new
+subclass from :py:mod:`FSRSModule` and placing it in the `installed_modules` folder. The only restriction is
+that each class has to be in its own file having the identical filename as the class name. For example,
+`myClass` should be placed in a file called `myClass.py`.
+
+A good place to start are, of course, the existing modules. New hardware modules can easily be created from the existing *dummy* modules.
+Furthermore, there are a set of more specialized subclasses of `FSRSModule` that provide the required interface functions and some basic functionality:
+:py:class:`core.FSRSModule.Input`, :py:class:`core.FSRSModule.Camera`, :py:class:`core.FSRSModule.Axis`, :py:class:`core.FSRSModule.Output`, and :py:class:`core.FSRSModule.Experiment`.
+
+Startup Procedure
+-----------------
+
+1. Upon startup pyFSRS browses the `installed_modules` folder for FSRSModules and adds each module as a new panel to the main GUI. The modules have to be sorted in folders according to their function. Each folder is represented as a new page containing module panels. The name of the folder is directly used for naming the tab. In summary, new tabs are created by adding new folders. Module panels are then populated by copying the module files into this folder. Currently, the modules are sorted according to function.
+
+2. When a module is found, pyFSRS first tries to call the module function `howMany`, which should return a positive non-zero integer number `N` that indicates how many times this module should be initialized. Currently, this function is only used by the :py:mod:`SR830` module to support multiple SR830 lock-in amplifiers through a single module class.
+
+3. pyFSRS then creates `N` instances of the module class.
+
+4. After all modules are loaded, they are initialized by calling their `initialize` member function. A list of all modules is passed to this function to allow the module to add functionality according to installed modules. For instance, a measurement module would use this opportunity to populate the lists of input and motor devices. A copy of this list is then usually stored to enable `freezeUI` to (un-) block the GUI during a measurement.
+
+5. pyFSRS is now ready to be used.
+
+Shutdown Procedure
+------------------
+
+1. When the user wants to exit the program, pyFSRS first calls the `canQuit` member function of each module. This function can be used to veto the decision to shutdown, for instance, if a measurement is still in progress.
+
+2. Only if all modules return `True`, pyFSRS goes on to call each modules' `shutdown` member function to ensure a controlled exit. Use this function to home motorized stages and safely exit the hardware libraries.
+
+3. Finally, pyFSRS quits.

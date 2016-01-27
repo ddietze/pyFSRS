@@ -1,0 +1,5 @@
+`FSRSModule.Input`
+==================
+
+.. autoclass:: core.FSRSModule.Input
+    :members:    

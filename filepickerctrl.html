@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FilePickerCtrl &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="next" title="FSRSModule" href="fsrsmodule.html" />
+    <link rel="prev" title="pyFSRS" href="pyfsrs.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsmodule.html" title="FSRSModule"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyfsrs.html" title="pyFSRS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" accesskey="U">Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-core.FilePickerCtrl">
+<span id="filepickerctrl"></span><h1><cite>FilePickerCtrl</cite><a class="headerlink" href="#module-core.FilePickerCtrl" title="Permalink to this headline">¶</a></h1>
+<p>A simple file and path picker widget consisting of a text field and a button.</p>
+<dl class="class">
+<dt id="core.FilePickerCtrl.FilePickerCtrl">
+<em class="property">class </em><code class="descclassname">core.FilePickerCtrl.</code><code class="descname">FilePickerCtrl</code><span class="sig-paren">(</span><em>parent</em>, <em>id=-1</em>, <em>startDir=''</em>, <em>mode='path'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>FilePickerCtrl is a simple file picker widget for wxPython consisting of a text-field and a
+&#8216;select file&#8217;-button.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>parent</strong> (<em>wxWindow</em>) &#8211; Parent window.</li>
+<li><strong>id</strong> (<em>int</em>) &#8211; Widget it (default=-1).</li>
+<li><strong>startDir</strong> (<em>str</em>) &#8211; Initial directory to display in search dialog (default=&#8217;&#8217; for current).</li>
+<li><strong>mode</strong> (<em>str</em>) &#8211; Type of dialog (&#8216;open&#8217;, &#8216;save&#8217;, &#8216;path&#8217; = default).</li>
+<li><strong>kwargs</strong> &#8211; Other parameters that are passed on to the wxPanel constructor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.Disable">
+<code class="descname">Disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.Disable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.Disable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disable widget.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.Enable">
+<code class="descname">Enable</code><span class="sig-paren">(</span><em>value=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.Enable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.Enable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable widget when value is True (default) or False.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.GetSize">
+<code class="descname">GetSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.GetSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.GetSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return wxSize-object containing widget dimensions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.GetValue">
+<code class="descname">GetValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.GetValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.GetValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return selected path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.SetSize">
+<code class="descname">SetSize</code><span class="sig-paren">(</span><em>w</em>, <em>h=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.SetSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.SetSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set widget size.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>w</strong> (<em>mixed</em>) &#8211; Width in pixel if h is not None. Otherwise tuple containing width and height.</li>
+<li><strong>h</strong> (<em>int</em>) &#8211; Height in pixel (default=None).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.SetValue">
+<code class="descname">SetValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.SetValue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.SetValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set current path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.FilePickerCtrl.FilePickerCtrl.onBrowse">
+<code class="descname">onBrowse</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FilePickerCtrl.html#FilePickerCtrl.onBrowse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FilePickerCtrl.FilePickerCtrl.onBrowse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the button click event by displaying a file or path dialog.</p>
+<p>Emits a <cite>FileSelectEvent</cite> when the user clicks OK.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsmodule.html" title="FSRSModule"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyfsrs.html" title="pyFSRS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

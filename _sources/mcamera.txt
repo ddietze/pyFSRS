@@ -1,0 +1,5 @@
+`FSRSModule.Camera`
+===================
+
+.. autoclass:: core.FSRSModule.Camera
+    :members:

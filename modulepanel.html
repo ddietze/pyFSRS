@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ModulePanel &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="prev" title="FSRSutils" href="fsrsutils.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsutils.html" title="FSRSutils"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" accesskey="U">Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-core.ModulePanel">
+<span id="modulepanel"></span><h1><cite>ModulePanel</cite><a class="headerlink" href="#module-core.ModulePanel" title="Permalink to this headline">¶</a></h1>
+<p>A ModulePage is a container widget that holds a variable number of ModulePanels.
+A ModulePanel is a customized collapsible wxPanel for displaying a list of labeled wxWidgets.
+While these two are mainly used for showing pyFSRS modules and their properties, the widgets
+can be used very general.</p>
+<p>Example usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">from</span> <span class="nn">ModulePanel</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># create wxPython app</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">()</span>
+<span class="n">frame</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;pyFSRS - Test module panel&quot;</span><span class="p">)</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+
+<span class="c"># create a new ModulePage</span>
+<span class="n">page</span> <span class="o">=</span> <span class="n">ModulePage</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># create ModulePanels and add them to ModulePage</span>
+<span class="n">pane1</span> <span class="o">=</span> <span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 1&quot;</span><span class="p">)</span>
+<span class="n">pane1</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">,</span> <span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">pane1</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Left&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="n">pane1</span><span class="o">.</span><span class="n">GetPane</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Hallo Welt&quot;</span><span class="p">))</span>
+<span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">pane1</span><span class="p">)</span>
+
+<span class="n">pane2</span> <span class="o">=</span> <span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">Colour</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 2&quot;</span><span class="p">)</span>
+<span class="n">pane2</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;some&quot;</span><span class="p">,</span> <span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">pane2</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;Left&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="n">pane2</span><span class="o">.</span><span class="n">GetPane</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Hallo Welt&quot;</span><span class="p">))</span>
+<span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">pane2</span><span class="p">)</span>
+
+<span class="c"># this demonstrates how widgets can be added after creating the panel</span>
+<span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 3&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 4&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;B&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 5&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;C&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+<span class="n">page</span><span class="o">.</span><span class="n">GetPanel</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">AddPanel</span><span class="p">(</span><span class="n">ModulePanel</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&quot;Module 6&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">&quot;D&quot;</span><span class="p">,</span> <span class="s">&quot;Line&quot;</span><span class="p">)</span>
+
+<span class="c"># show the fram and run the app</span>
+<span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="core.ModulePanel.ModulePage">
+<em class="property">class </em><code class="descclassname">core.ModulePanel.</code><code class="descname">ModulePage</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container widget holding a number of ModulePanels. Only one panel may be expanded at a time.</p>
+<dl class="method">
+<dt id="core.ModulePanel.ModulePage.AddPanel">
+<code class="descname">AddPanel</code><span class="sig-paren">(</span><em>panel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePage.AddPanel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePage.AddPanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a ModulePanel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Params ModulePanel panel:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">Panel which to add to the ModulePage.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Id of added panel.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePage.GetNumPanels">
+<code class="descname">GetNumPanels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePage.GetNumPanels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePage.GetNumPanels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of panels on this page.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePage.GetPanel">
+<code class="descname">GetPanel</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePage.GetPanel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePage.GetPanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the ModulePanel with given id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<em>int</em>) &#8211; Id or index of panel to return.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Instance of ModulePanel.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePage.onPanelHide">
+<code class="descname">onPanelHide</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePage.onPanelHide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePage.onPanelHide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event handler to manage the exclusive expansion of a single panel at a time by closing all other panels.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="core.ModulePanel.ModulePanel">
+<em class="property">class </em><code class="descclassname">core.ModulePanel.</code><code class="descname">ModulePanel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A collapsible wxPanel that is used to display FSRSModules and their properties.
+This panel arranges child widgets row by row with a label printed in the left column and the actual widget displayed in the right column.</p>
+<p>Accepts wxPanel&#8217;s standard parameters. Especially</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>color</em>: wxColour that defines the color of the panel&#8217;s frame. This value indirectly defines also the color of the title font. If it is a light color, the title is black, otherwise it is white.</li>
+<li><em>bgcolor</em>: wxColour that defines the background color of the panel&#8217;s interior.</li>
+<li><em>label</em>: Title of the panel that appears on the top.</li>
+<li><em>font</em>: wxFont for the panel&#8217;s title and its children.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.Add">
+<code class="descname">Add</code><span class="sig-paren">(</span><em>label</em>, <em>wnd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.Add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.Add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a widget to the panel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>label</strong> (<em>str</em>) &#8211; Text / label to be displayed in the left column.</li>
+<li><strong>wnd</strong> (<em>mixed</em>) &#8211; Either wxWidget to be added in the right column or a string to be added as simple static text.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.GetPanel">
+<code class="descname">GetPanel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.GetPanel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.GetPanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the main panel, which serves as parent to the child widgets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.Hide">
+<code class="descname">Hide</code><span class="sig-paren">(</span><em>hide=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.Hide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.Hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>(Un-) Hide the panel&#8217;s content and (expand) shrink it to show its (full content) title bar when hide is (False) True.
+Call this function only after the main frame has been initialized.
+Emits a <cite>PanelHideEvent</cite> to notify other panels of its action.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="core.ModulePanel.ModulePanel.expanded">
+<code class="descname">expanded</code><em class="property"> = None</em><a class="headerlink" href="#core.ModulePanel.ModulePanel.expanded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expanded or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.mouseInBtn">
+<code class="descname">mouseInBtn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.mouseInBtn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.mouseInBtn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if mouse hovers above the panel&#8217;s title bar, which is used to collapse or uncollapse the panel.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.onEraseBackground">
+<code class="descname">onEraseBackground</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.onEraseBackground"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.onEraseBackground" title="Permalink to this definition">¶</a></dt>
+<dd><p>This event is used to paint the panel&#8217;s frame in the background.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.onLMouseDown">
+<code class="descname">onLMouseDown</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.onLMouseDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.onLMouseDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mouse left-click event handler that controls collapsing or uncollapsing the panel.&#8221;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.onMouseMove">
+<code class="descname">onMouseMove</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.onMouseMove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.onMouseMove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mouse move event handler that controls cursor appearance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="core.ModulePanel.ModulePanel.onResize">
+<code class="descname">onResize</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/ModulePanel.html#ModulePanel.onResize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.ModulePanel.ModulePanel.onResize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle a resize by repainting the panel.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fsrsutils.html" title="FSRSutils"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

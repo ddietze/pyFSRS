@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FSRSutils &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="up" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="next" title="ModulePanel" href="modulepanel.html" />
+    <link rel="prev" title="FSRSPlot" href="fsrsplot.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modulepanel.html" title="ModulePanel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="fsrsplot.html" title="FSRSPlot"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" accesskey="U">Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-core.FSRSutils">
+<span id="fsrsutils"></span><h1><cite>FSRSutils</cite><a class="headerlink" href="#module-core.FSRSutils" title="Permalink to this headline">¶</a></h1>
+<p>This module provides some utility functions that are used internally in pyFSRS.</p>
+<dl class="function">
+<dt id="core.FSRSutils.appendStageParameters">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">appendStageParameters</code><span class="sig-paren">(</span><em>prop</em>, <em>fr=-500</em>, <em>to=2500</em>, <em>st=20</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#appendStageParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.appendStageParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and append the necessary controls for a delay stage to a FSRSmodule property dictionary.</p>
+<p>This function creates the following controls:</p>
+<blockquote>
+<div><ul class="simple">
+<li><strong>From (fs)</strong> (textbox): Set the starting position. When value changes, <cite>onAxisRangeChange</cite> is called (has to be implemented by user).</li>
+<li><strong>Till (fs)</strong> (textbox): Set the ending position. When value changes, <cite>onAxisRangeChange</cite> is called (has to be implemented by user).</li>
+<li><strong>Step Size (fs)</strong> / <strong># of Steps</strong> (textbox): Set the desired step size (linear stepping) or number of steps (logarithmic stepping). When value changes, <cite>onAxisRangeChange</cite> is called (has to be implemented by user).</li>
+<li><strong>Mode</strong> (choice): Set type of stepping (&#8216;linear&#8217;, &#8216;logarithmic&#8217;, &#8216;from file&#8217;). When value changes, <cite>onAxisRangeChange</cite> is called (has to be implemented by user).</li>
+<li><strong>Random</strong> (checkbox): If True, the target positions are approached in random order, otherwise sequential. Works for all modes.</li>
+<li><strong>Use File</strong> (fie picker): Select a text file containing the desired stage positions. If there are several columns in the file, only the first one is used.</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prop</strong> (<em>dict</em>) &#8211; Property dictionary to which the controls are appended.</li>
+<li><strong>fr</strong> (<em>float</em>) &#8211; Initial start position in fs (default=-500).</li>
+<li><strong>to</strong> (<em>float</em>) &#8211; Initial stop position in fs (default=2500).</li>
+<li><strong>st</strong> (<em>float</em>) &#8211; Initial step size in fs (default=20).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Appended property dictionary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.FSRSutils.formatFSRSFilename">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">formatFSRSFilename</code><span class="sig-paren">(</span><em>type</em>, <em>basename</em>, <em>step</em>, <em>set=0</em>, <em>shutter=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#formatFSRSFilename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.formatFSRSFilename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use the historical formatting convention for FSRS and TA data filenames.</p>
+<p>The generated filenames are compatible with the formerly used LabView code in the Mathies lab.
+This function is called by the FSRS-modules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>type</strong> (<em>int</em>) &#8211; Type of spectrum (0 = FSRS, 1 = TA).</li>
+<li><strong>basename</strong> (<em>str</em>) &#8211; Basename of the generated files.</li>
+<li><strong>step</strong> (<em>float</em>) &#8211; Position of axis = time.</li>
+<li><strong>set</strong> (<em>int</em>) &#8211; Number of measurement set or run (default = 0).</li>
+<li><strong>shutter</strong> (<em>int</em>) &#8211; State of actinic shutter (0 = closed = ground state, 1 = open = excited state).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Formatted filename: basename_(p/m)|step|(gr/exc/_)set.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.FSRSutils.onAxisRangeChange">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">onAxisRangeChange</code><span class="sig-paren">(</span><em>self</em>, <em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#onAxisRangeChange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.onAxisRangeChange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles changes in one of the axis parameters.</p>
+<p>Call this event handler from within an event handler of the same name in the module using the stage.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.FSRSutils.prepareScanPoints">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">prepareScanPoints</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#prepareScanPoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.prepareScanPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of stage positions according to the current stage settings.</p>
+<p>Call from within the module using the stage as this function directly reads the stage settings from the module properties.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.FSRSutils.saveFSRS">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">saveFSRS</code><span class="sig-paren">(</span><em>filename</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#saveFSRS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.saveFSRS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut to save N-column data using numpy&#8217;s <cite>savetxt</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) &#8211; Filename of output file.</li>
+<li><strong>data</strong> (<em>array</em>) &#8211; N x M data array.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="core.FSRSutils.saveXC">
+<code class="descclassname">core.FSRSutils.</code><code class="descname">saveXC</code><span class="sig-paren">(</span><em>filename</em>, <em>timepoints</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/core/FSRSutils.html#saveXC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.FSRSutils.saveXC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut to save cross correlation data using numpy&#8217;s <cite>savetxt</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>str</em>) &#8211; Filename of output file.</li>
+<li><strong>timepoints</strong> (<em>array</em>) &#8211; M-dim. array of stage positions = time axis.</li>
+<li><strong>data</strong> (<em>array</em>) &#8211; N x M data array.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modulepanel.html" title="ModulePanel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="fsrsplot.html" title="FSRSPlot"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="coremodules.html" >Description of Core Modules</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

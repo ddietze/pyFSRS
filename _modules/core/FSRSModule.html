@@ -1,0 +1,1021 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>core.FSRSModule &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Shipped Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for core.FSRSModule</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module: FSRSModule</span>
+<span class="sd">   :platform: Windows</span>
+<span class="sd">.. moduleauthor:: Daniel R. Dietze &lt;daniel.dietze@berkeley.edu&gt;</span>
+
+<span class="sd">FSRSModule represents the base class for all modules in pyFSRS.</span>
+<span class="sd">In addition to the class, this module provides some functions for dynamically</span>
+<span class="sd">loading and handling FSRSModules.</span>
+
+<span class="sd">..</span>
+<span class="sd">   This file is part of the pyFSRS app.</span>
+
+<span class="sd">   This program is free software: you can redistribute it and/or modify</span>
+<span class="sd">   it under the terms of the GNU General Public License as published by</span>
+<span class="sd">   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">   (at your option) any later version.</span>
+
+<span class="sd">   This program is distributed in the hope that it will be useful,</span>
+<span class="sd">   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="sd">   GNU General Public License for more details.</span>
+
+<span class="sd">   You should have received a copy of the GNU General Public License</span>
+<span class="sd">   along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">   Copyright 2014-2016 Daniel Dietze &lt;daniel.dietze@berkeley.edu&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">wx</span>
+<span class="kn">import</span> <span class="nn">imp</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">FilePickerCtrl</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># dynamically load the module given by filepath and</span>
+<span class="c"># returns a list with an instance of the class having the same name as the module</span>
+<span class="c"># if the module has a howMany() function, return as many instances as returned by howMany()</span>
+<div class="viewcode-block" id="load_from_file"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.load_from_file">[docs]</a><span class="k">def</span> <span class="nf">load_from_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Dynamically load a FSRSModule given by `filepath` and try to return an instance of</span>
+<span class="sd">    the module class. The module class has to have the identical name as the file!</span>
+
+<span class="sd">    If the module provides a `howMany` function, this function initiates the necessary number of</span>
+<span class="sd">    class instances and returns them as a list.</span>
+
+<span class="sd">    .. note:: This function is not limited to FSRSModules but can be used to dynamically import any python module.</span>
+
+<span class="sd">    :param str filepath: Filename of the module to load including the file extension (.pyc or .py).</span>
+<span class="sd">    :returns: List of module class instances or None if no class could be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">class_inst</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Module does not exist!&quot;</span><span class="p">)</span>
+
+    <span class="n">mod_name</span><span class="p">,</span> <span class="n">file_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">filepath</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">file_ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;.pyc&#39;</span><span class="p">:</span>
+        <span class="n">py_mod</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_compiled</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;.py&#39;</span><span class="p">:</span>
+        <span class="n">py_mod</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+
+    <span class="c"># check whether the module has a howMany function and if so, get the number of class instances that should be initiated</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">py_mod</span><span class="p">,</span> <span class="n">mod_name</span><span class="p">):</span>
+        <span class="n">inst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">py_mod</span><span class="p">,</span> <span class="s">&quot;howMany&quot;</span><span class="p">):</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">py_mod</span><span class="p">,</span> <span class="s">&quot;howMany&quot;</span><span class="p">)()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">class_inst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">py_mod</span><span class="p">,</span> <span class="n">mod_name</span><span class="p">)()</span>
+            <span class="n">inst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_inst</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inst</span>
+    <span class="k">return</span> <span class="bp">None</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># text control validators</span></div>
+<div class="viewcode-block" id="NumValidator"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.NumValidator">[docs]</a><span class="k">class</span> <span class="nc">NumValidator</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">PyValidator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Custom text control validator to be used internally with text inputs for numerical values.</span>
+<span class="sd">    The validator test for conversion of the entered string into the desired numerical or string data type. If it fails,</span>
+<span class="sd">    it displays a messge box asking the user to correct his input.</span>
+
+<span class="sd">    :param str type: Type of allowed input (&#39;float&#39; = default, &#39;int&#39;, &#39;str&#39;).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s">&#39;float&#39;</span><span class="p">):</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">PyValidator</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c"># self.Bind(wx.EVT_CHAR, self.OnChar)</span>
+        <span class="c"># self.Bind(wx.EVT_CHAR, self.OnText)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oldtext</span> <span class="o">=</span> <span class="s">&quot;0&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+
+    <span class="k">def</span> <span class="nf">Clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">NumValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">Validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">win</span><span class="p">):</span>
+        <span class="n">textCtrl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetWindow</span><span class="p">()</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">textCtrl</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;float&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">float</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">wx</span><span class="o">.</span><span class="n">MessageBox</span><span class="p">(</span><span class="s">&quot;Please correct input! Only floating point values allowed!&quot;</span><span class="p">,</span> <span class="s">&quot;Invalid Input&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ICON_ERROR</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;int&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">wx</span><span class="o">.</span><span class="n">MessageBox</span><span class="p">(</span><span class="s">&quot;Please correct input! Only integer values allowed!&quot;</span><span class="p">,</span> <span class="s">&quot;Invalid Input&quot;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">OK</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ICON_ERROR</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">TransferToWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">TransferFromWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="c"># def OnText(self, event):</span>
+    <span class="c">#     textCtrl = self.GetWindow()</span>
+    <span class="c">#     text = textCtrl.GetValue()</span>
+    <span class="c">#</span>
+    <span class="c">#     try:</span>
+    <span class="c">#         if self.type == &quot;float&quot;:</span>
+    <span class="c">#             float(text)</span>
+    <span class="c">#         else:</span>
+    <span class="c">#             int(text)</span>
+    <span class="c">#     except:</span>
+    <span class="c">#         textCtrl.SetValue(self.oldtext)</span>
+    <span class="c">#         return</span>
+    <span class="c">#</span>
+    <span class="c">#     self.oldtext = text</span>
+    <span class="c">#     event.Skip()</span>
+    <span class="c">#</span>
+    <span class="c"># def OnChar(self, event):</span>
+    <span class="c">#</span>
+    <span class="c">#     textCtrl = self.GetWindow()</span>
+    <span class="c">#     text = textCtrl.GetValue()</span>
+    <span class="c">#</span>
+    <span class="c">#     keycode = int(event.GetUnicodeKey())</span>
+    <span class="c">#</span>
+    <span class="c">#     if keycode == wx.WXK_TAB:</span>
+    <span class="c">#         event.Skip()</span>
+    <span class="c">#         return</span>
+    <span class="c">#</span>
+    <span class="c">#     if keycode != wx.WXK_NONE:</span>
+    <span class="c">#         key = chr(keycode)</span>
+    <span class="c">#</span>
+    <span class="c">#         if self.type == &quot;float&quot;:</span>
+    <span class="c">#             if key == &quot;e&quot;:</span>
+    <span class="c">#                 if text.count(&quot;e&quot;) &gt; 0:</span>
+    <span class="c">#                     return</span>
+    <span class="c">#             elif key == &quot;.&quot;:</span>
+    <span class="c">#                 if text.count(&quot;.&quot;) &gt; 0:</span>
+    <span class="c">#                     return</span>
+    <span class="c">#             elif key == &quot;-&quot;:</span>
+    <span class="c">#                 if text.count(&quot;-&quot;) &gt; 1:</span>
+    <span class="c">#                     return</span>
+    <span class="c">#             elif key not in string.digits:</span>
+    <span class="c">#                 return</span>
+    <span class="c">#         else:</span>
+    <span class="c">#             if key == &quot;-&quot;:</span>
+    <span class="c">#                 if text.count(&quot;-&quot;) &gt; 0:</span>
+    <span class="c">#                     return</span>
+    <span class="c">#             elif key not in string.digits:</span>
+    <span class="c">#                 return</span>
+    <span class="c">#</span>
+    <span class="c">#     event.Skip()</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for a property element associated to module</span></div>
+<div class="viewcode-block" id="ModProp"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp">[docs]</a><span class="k">class</span> <span class="nc">ModProp</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Base class for a property element associated with a FSRSModule.</span>
+
+<span class="sd">    A property has a name, a type, some value, a window handle to its control widget, an event handler and additional infos.</span>
+<span class="sd">    Currently supported types are `label`, `input`, `choice`, `button`, `checkbox`, `progress`, `file`, `toggle`, and `spin`.</span>
+<span class="sd">    Additional infos are:</span>
+
+<span class="sd">        - *file*: `info` = &#39;open&#39; / &#39;save&#39; / &#39;path&#39;</span>
+<span class="sd">        - *toggle*: `info` = label of control element to be displayed next to the checkbox.</span>
+<span class="sd">        - *spin*: `info` = (min, max)-tuple for spin control limits</span>
+<span class="sd">        - *input*: `info` = allowed data type &#39;float&#39; / &#39;int&#39; / &#39;str&#39; (or empty)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labelwnd</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;label&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>        <span class="c"># additional info used for some widgets:</span>
+        <span class="c"># &#39;file&#39; -&gt; &#39;info&#39; = [&#39;open&#39;, &#39;save&#39;, &#39;path&#39;]</span>
+        <span class="c"># &#39;toggle&#39;, &#39;checkbox&#39; -&gt; &#39;info&#39; = label of control element, if empty, property label is used instead</span>
+        <span class="c"># &#39;spin&#39; -&gt; &#39;info&#39; = (min, max) tuple for spin control limits</span>
+        <span class="c"># &#39;input&#39; -&gt; data type used for validation of input; &quot;float&quot; or &quot;int&quot;; if given, the EVT_TEXT event is connected to a validator</span>
+
+<div class="viewcode-block" id="ModProp.getInfo"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getInfo">[docs]</a>    <span class="k">def</span> <span class="nf">getInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return info field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
+</div>
+<div class="viewcode-block" id="ModProp.getLabel"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getLabel">[docs]</a>    <span class="k">def</span> <span class="nf">getLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return label.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+</div>
+<div class="viewcode-block" id="ModProp.getType"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getType">[docs]</a>    <span class="k">def</span> <span class="nf">getType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span>
+</div>
+<div class="viewcode-block" id="ModProp.getValue"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getValue">[docs]</a>    <span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the current property value. If a window handle exists, the property value is directly</span>
+<span class="sd">        read out from that widget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># if a handle exists, update the variable before returning it</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;label&quot;</span><span class="p">,</span> <span class="s">&quot;button&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">GetLabel</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;choice&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">GetSelection</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;checkbox&quot;</span><span class="p">,</span> <span class="s">&quot;toggle&quot;</span><span class="p">,</span> <span class="s">&quot;progress&quot;</span><span class="p">,</span> <span class="s">&quot;file&quot;</span><span class="p">,</span> <span class="s">&quot;spin&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+</div>
+<div class="viewcode-block" id="ModProp.getChoices"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getChoices">[docs]</a>    <span class="k">def</span> <span class="nf">getChoices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns choices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span>
+</div>
+<div class="viewcode-block" id="ModProp.getHandle"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getHandle">[docs]</a>    <span class="k">def</span> <span class="nf">getHandle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns handle to widget, i.e., the wx control element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span>
+</div>
+<div class="viewcode-block" id="ModProp.getEvent"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.getEvent">[docs]</a>    <span class="k">def</span> <span class="nf">getEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the event handler function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span>
+</div>
+    <span class="k">def</span> <span class="nf">setLabelWnd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wnd</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">labelwnd</span> <span class="o">=</span> <span class="n">wnd</span>
+
+<div class="viewcode-block" id="ModProp.setLabel"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setLabel">[docs]</a>    <span class="k">def</span> <span class="nf">setLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set label of property. Also updates labelwnd.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">txt</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">labelwnd</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labelwnd</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModProp.setType"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setType">[docs]</a>    <span class="k">def</span> <span class="nf">setType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set property type.</span>
+
+<span class="sd">        Allowed values are &#39;label&#39;, &#39;input&#39;, &#39;choice&#39;, &#39;button&#39;, &#39;checkbox&#39;, &#39;toggle&#39;, &#39;file&#39;, &#39;progress&#39;, and &#39;spin&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="s">&#39;input&#39;</span><span class="p">,</span> <span class="s">&#39;choice&#39;</span><span class="p">,</span> <span class="s">&#39;button&#39;</span><span class="p">,</span> <span class="s">&#39;checkbox&#39;</span><span class="p">,</span> <span class="s">&#39;toggle&#39;</span><span class="p">,</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;progress&#39;</span><span class="p">,</span> <span class="s">&#39;spin&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Not a valid property type!&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">val</span>
+</div>
+<div class="viewcode-block" id="ModProp.setValue"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setValue">[docs]</a>    <span class="k">def</span> <span class="nf">setValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set property value.</span>
+
+<span class="sd">        Performs a rough sanity check depending on the type of property. If a widget is attached,</span>
+<span class="sd">        also the value displayed in the widget is updated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;checkbox&#39;</span><span class="p">,</span> <span class="s">&#39;toggle&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">((</span><span class="n">val</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">val</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">val</span> <span class="ow">and</span> <span class="n">val</span><span class="p">))):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Invalid value for property type checkbox: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;choice&#39;</span> <span class="ow">and</span> <span class="n">val</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">))):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Invalid value for property type choice! Index out of range (0..</span><span class="si">%d</span><span class="s">): </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">),</span> <span class="n">val</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;progress&#39;</span> <span class="ow">and</span> <span class="p">(</span><span class="n">val</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Invalid value for property type progress (0..100): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;spin&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Invalid value for property type spin: must be integer!:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">val</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;label&quot;</span><span class="p">,</span> <span class="s">&quot;button&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;choice&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetSelection</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;file&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;checkbox&quot;</span><span class="p">,</span> <span class="s">&quot;toggle&quot;</span><span class="p">,</span> <span class="s">&quot;progress&quot;</span><span class="p">,</span> <span class="s">&quot;spin&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ModProp.setChoices"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setChoices">[docs]</a>    <span class="k">def</span> <span class="nf">setChoices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Set list of choices. Accepts a python list as argument.</span>
+<span class="sd">        If a widget is attached to the property, the list of choices of the wxChoice box is</span>
+<span class="sd">        also updated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="nb">type</span><span class="p">([])):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;New choices have to be passed as python list.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">choices</span> <span class="o">=</span> <span class="n">ch</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;choice&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">Append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetSelection</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="ModProp.setHandle"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setHandle">[docs]</a>    <span class="k">def</span> <span class="nf">setHandle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hndl</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set window handle. `hndl` has to be a valid wxWidget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">hndl</span>
+</div>
+<div class="viewcode-block" id="ModProp.setEvent"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setEvent">[docs]</a>    <span class="k">def</span> <span class="nf">setEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evt</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set event handler. `evt` is either a python function or None to disable the event handler.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="o">=</span> <span class="n">evt</span>
+</div>
+<div class="viewcode-block" id="ModProp.setInfo"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.setInfo">[docs]</a>    <span class="k">def</span> <span class="nf">setInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the info field according to the type of property.</span>
+<span class="sd">        For some types (&#39;file&#39; and &#39;input&#39;), this variable defines the appearance of the widgets and therefore has to be</span>
+<span class="sd">        changed before the window handle is created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;file&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">info</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;open&quot;</span><span class="p">,</span> <span class="s">&quot;save&quot;</span><span class="p">,</span> <span class="s">&quot;path&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Info property has to be one of [&#39;open&#39;, &#39;save&#39;, &#39;path&#39;] for type &#39;file&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Info property for type &#39;file&#39; can only be changed before creation of handle!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;input&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">info</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;float&quot;</span><span class="p">,</span> <span class="s">&quot;int&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Info property has to be one of [&#39;float&#39;, &#39;int&#39;, &#39;&#39;] for type &#39;input&#39;.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Info property for type &#39;input&#39; can only be changed before creation of handle!&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&quot;checkbox&quot;</span><span class="p">,</span> <span class="s">&quot;toggle&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;spin&quot;</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetMin</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">SetMax</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+    <span class="c"># create the wx widget corresponding to the property type</span>
+    <span class="c"># parent is the wx.TreeCtrl instance that holds the widgets</span></div>
+<div class="viewcode-block" id="ModProp.createHandle"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.createHandle">[docs]</a>    <span class="k">def</span> <span class="nf">createHandle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create and return the wxWidget corresponding to the property type and attach to parent. `parent` is the wxTreeCtrl instance</span>
+<span class="sd">        that holds the widgets. If an event handler is given, the correct binding is also created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;label&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;input&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">NumValidator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">TE_PROCESS_ENTER</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TE_RIGHT</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_TEXT_ENTER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_KILL_FOCUS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;choice&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHOICE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;button&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;checkbox&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">!=</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">lbl</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHECKBOX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;toggle&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">!=</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">ToggleButton</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">lbl</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_TOGGLEBUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;progress&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Gauge</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">SetRange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&#39;file&#39;</span><span class="p">:</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">FilePickerCtrl</span><span class="o">.</span><span class="n">FilePickerCtrl</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+            <span class="n">wnd</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">FilePickerCtrl</span><span class="o">.</span><span class="n">EVT_FILE_SELECT</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s">&quot;spin&quot;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">minmax</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">minmax</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="n">wnd</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">SpinCtrl</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">minmax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">max</span><span class="o">=</span><span class="n">minmax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">initial</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">wnd</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_SPINCTRL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">event</span><span class="p">)</span>
+
+        <span class="n">wnd</span><span class="o">.</span><span class="n">SetSize</span><span class="p">((</span><span class="mi">150</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">wnd</span>
+
+        <span class="k">return</span> <span class="n">wnd</span>
+
+    <span class="c"># enable / disable handle</span></div>
+<div class="viewcode-block" id="ModProp.freezeUI"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.ModProp.freezeUI">[docs]</a>    <span class="k">def</span> <span class="nf">freezeUI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable or disable the user interface, i.e., the associated wxWidget when freeze is False or True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="ow">not</span> <span class="n">freeze</span><span class="p">)</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for pyFSRS modules - all devices, experiments, and general settings objects have to be derived from this class</span></div></div>
+<div class="viewcode-block" id="FSRSModule"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule">[docs]</a><span class="k">class</span> <span class="nc">FSRSModule</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Base class for pyFSRS modules - all devices, experiments, and general settings objects have to be derived from this class.</span>
+
+<span class="sd">    .. note:: There are a number of specialized subclasses for input and output devices, stages, experimental controls, etc. which define the necessary interface functions and new modules should be derived from those instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># do class initialization here</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>               <span class="c">#: Name of the module as it appears in the treectrl.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span> <span class="o">=</span> <span class="p">[]</span>         <span class="c">#: List of property entries, each entry is one line in the treectrl.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propindex</span> <span class="o">=</span> <span class="p">{}</span>          <span class="c">#: Dictionary containing a mapping from label to index - created on the go.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">category</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>           <span class="c">#: Category of the module; used by the main app for sorting.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;module&quot;</span>         <span class="c">#: Type of module (&#39;input&#39;, &#39;output&#39;, &#39;axis&#39;, &#39;experiment&#39;).</span>
+
+    <span class="c"># --------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c"># module properties</span>
+
+<div class="viewcode-block" id="FSRSModule.addProperty"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.addProperty">[docs]</a>    <span class="k">def</span> <span class="nf">addProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a property to the module.</span>
+
+<span class="sd">        :param ModProp prop: Instance of ModProp containing the property to be added.</span>
+<span class="sd">        :returns: Id (= index) of added property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">!=</span> <span class="s">&quot;ModProp&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Property must be an instance of &#39;ModProp&#39;.&quot;</span><span class="p">)</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">id</span>
+</div>
+<div class="viewcode-block" id="FSRSModule.setProperty"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.setProperty">[docs]</a>    <span class="k">def</span> <span class="nf">setProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">prop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set / overwrite an existing property of the module.</span>
+
+<span class="sd">        :param int id: (= index) of added property.</span>
+<span class="sd">        :param ModProp prop: Instance of ModProp containing the new property.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">prop</span><span class="p">)</span><span class="o">.</span><span class="n">__name__</span> <span class="o">!=</span> <span class="s">&quot;ModProp&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Property must be an instance of &#39;ModProp&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Index out of range: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop</span>
+</div>
+<div class="viewcode-block" id="FSRSModule.getProperty"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.getProperty">[docs]</a>    <span class="k">def</span> <span class="nf">getProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the property with given id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Index out of range: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="FSRSModule.getPropertyByLabel"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.getPropertyByLabel">[docs]</a>    <span class="k">def</span> <span class="nf">getPropertyByLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extremely useful function that returns the property whose label matches `label`.</span>
+<span class="sd">        It is sufficient if the property label contains the string `label` irrespective of upper or lowercase lettering.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">propindex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">propindex</span><span class="p">[</span><span class="n">label</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">getLabel</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">propindex</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Property label not found: </span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="n">label</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FSRSModule.hasProperty"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.hasProperty">[docs]</a>    <span class="k">def</span> <span class="nf">hasProperty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns true if a property width the given label exists.</span>
+<span class="sd">        It is sufficient if the property label contains the string `label` irrespective of upper or lowercase lettering.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">propindex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">getLabel</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">label</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">propindex</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+
+    <span class="c"># convenience function to populate the list of properties at startup using a list of python dictionaries</span>
+    <span class="c"># required keys are &#39;label&#39; and &#39;type&#39;</span>
+    <span class="c"># if type is not label, additional keys are required: &#39;event&#39; = string name of event handler function</span>
+    <span class="c"># if type == choice: &#39;choices&#39;</span>
+    <span class="c"># the handle field is populated when the</span></div>
+<div class="viewcode-block" id="FSRSModule.parsePropertiesDict"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.parsePropertiesDict">[docs]</a>    <span class="k">def</span> <span class="nf">parsePropertiesDict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dct</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a list of properties directly by parsing a list of python dictionaries defining those properties.</span>
+
+<span class="sd">        :param list dct: Python list of dictionaries defining the properties.</span>
+
+<span class="sd">        Required keys are:</span>
+
+<span class="sd">            - *label*: Name of the property.</span>
+<span class="sd">            - *type*: Type of the property (`label`, `input`, `choice`, `button`, `checkbox`, `progress`, `file`, `toggle`, and `spin`).</span>
+<span class="sd">            - *value*: Initial value of the property according to its type.</span>
+<span class="sd">            - *choices*: If type=&#39;choice&#39;, a list of choice strings has to be given.</span>
+
+<span class="sd">        If type is &#39;file&#39;, &#39;toggle&#39;, &#39;spin&#39;, or &#39;input&#39;, also the *info*-key should to be present:</span>
+
+<span class="sd">            - *file*: `info` = &#39;open&#39; / &#39;save&#39; / &#39;path&#39;</span>
+<span class="sd">            - *toggle*: `info` = label of control element to be displayed next to the checkbox.</span>
+<span class="sd">            - *spin*: `info` = (min, max)-tuple for spin control limits</span>
+<span class="sd">            - *input*: `info` = allowed data type &#39;float&#39; / &#39;int&#39; / &#39;str&#39; (or empty)</span>
+
+<span class="sd">        An event handler may be given by its function name within the same module and passed along with the *event*-key.</span>
+
+<span class="sd">        Window handles are not parsed and will be populated automatically by `initialize`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">ModProp</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="s">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Missing key &#39;label&#39; in properties dict!&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;type&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Missing key &#39;type&#39; in properties dict!&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&#39;value&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Missing key &#39;value&#39; in properties dict!&quot;</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">])</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;label&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;choice&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s">&#39;choices&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Missing key &#39;choices&#39; in properties dict!&quot;</span><span class="p">)</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">setChoices</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;choices&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s">&#39;info&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">setInfo</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;info&#39;</span><span class="p">])</span>
+
+            <span class="n">p</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="s">&#39;event&#39;</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;event&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">setEvent</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;event&#39;</span><span class="p">]))</span>    <span class="c"># create a callable method from string name</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="c"># --------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c"># startup event handlers / functions</span>
+    <span class="c"># pass list of other modules in others to make module aware of its fellows</span>
+    <span class="c"># this version returns the number of instances that are in the list before this one</span></div>
+<div class="viewcode-block" id="FSRSModule.initialize"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">others</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Startup handler called by the pyFSRS app after all modules have been loaded.</span>
+
+<span class="sd">        .. important:: This function should be overwritten by any derived FSRSModule to perform the module specific initialization steps.</span>
+
+<span class="sd">        :param list others: A list of all loaded and available FSRSModules. Use this to a) check how many instances of this module have been loaded already and b) make connections to available hardware, for instance.</span>
+<span class="sd">        :returns: Number of modules of the same type that are already in the list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># count how many instances are before this one</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">others</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="ow">is</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">elif</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span>
+
+    <span class="c"># --------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c"># shutdown event handlers / functions</span>
+
+    <span class="c"># called when main application is about to quit; return False if there is something going on that prevents closing</span></div>
+<div class="viewcode-block" id="FSRSModule.canQuit"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.canQuit">[docs]</a>    <span class="k">def</span> <span class="nf">canQuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function is called by the pyFSRS app when the user requests to close the program.</span>
+<span class="sd">        If this module is ok with leaving, return True, otherwise return False. For instance, when a scan is still running</span>
+<span class="sd">        this would be the right time to ask whether the user really wants to quit.</span>
+
+<span class="sd">        .. important:: This function should be overwritten by any derived FSRSModule to perform the module specific shutdown steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="c"># this function is called when the application is shut down; do all the clean up here (close drivers, etc)</span></div>
+<div class="viewcode-block" id="FSRSModule.shutdown"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function is called by the pyFSRS app when the program is about to close. At this point, no veto is possible.</span>
+<span class="sd">        Use this function to perform the necessary steps for a safe exit, like close connections to libraries or moving any stages to</span>
+<span class="sd">        their initial positions, and so on.</span>
+
+<span class="sd">        .. important:: This function should be overwritten by any derived FSRSModule to perform the module specific shutdown steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="c"># --------------------------------------------------------------------------------------------------------------------</span>
+    <span class="c"># enable / disable user interface</span></div>
+<div class="viewcode-block" id="FSRSModule.freezeUI"><a class="viewcode-back" href="../../fsrsmodule.html#core.FSRSModule.FSRSModule.freezeUI">[docs]</a>    <span class="k">def</span> <span class="nf">freezeUI</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freeze</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enable of disable the user interface, i.e. all property widgets when freeze is False or True.</span>
+<span class="sd">        This function is handy to block the user from messing with parameters during a scan, for example.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">freezeUI</span><span class="p">(</span><span class="n">freeze</span><span class="p">)</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for any input device</span></div></div>
+<div class="viewcode-block" id="Input"><a class="viewcode-back" href="../../minput.html#core.FSRSModule.Input">[docs]</a><span class="k">class</span> <span class="nc">Input</span><span class="p">(</span><span class="n">FSRSModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for any input device that is used to read a single value. Examples include lock-in-amplifiers or DAQs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">FSRSModule</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;input&quot;</span>
+
+    <span class="c"># this is the only additional function an input device has to have</span>
+    <span class="c"># returns some value</span>
+<div class="viewcode-block" id="Input.read"><a class="viewcode-back" href="../../minput.html#core.FSRSModule.Input.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a single measurement value.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derive input module to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for any camera device</span></div></div>
+<div class="viewcode-block" id="Camera"><a class="viewcode-back" href="../../mcamera.html#core.FSRSModule.Camera">[docs]</a><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="n">FSRSModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for any camera device that is used to read a 3xN array of data for FSRS and TA.</span>
+<span class="sd">    The module type is &#39;input&#39;, so that it can be used in place of any input device.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">FSRSModule</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;input&quot;</span>
+
+    <span class="c"># this is the only additional function an input device has to have</span>
+    <span class="c"># returns some value</span>
+<div class="viewcode-block" id="Camera.read"><a class="viewcode-back" href="../../mcamera.html#core.FSRSModule.Camera.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a single measurement value.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derive input module to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span>
+</div>
+<div class="viewcode-block" id="Camera.readNframes"><a class="viewcode-back" href="../../mcamera.html#core.FSRSModule.Camera.readNframes">[docs]</a>    <span class="k">def</span> <span class="nf">readNframes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">canQuit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a 3xN array of data with columns &#39;pumpOn / pumpOff&#39;, &#39;pumpOn&#39;, &#39;pumpOff&#39;.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derived camera module to implement the device specific code.</span>
+
+<span class="sd">        :param int N: Number of frames to read.</span>
+<span class="sd">        :param threading.Event() canQuit: Pass along the theading event that may be used to stop acquisition or None if this is not desired.</span>
+<span class="sd">        :returns: 3xN array with measured data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span><span class="p">]</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for any output device</span></div></div>
+<div class="viewcode-block" id="Output"><a class="viewcode-back" href="../../moutput.html#core.FSRSModule.Output">[docs]</a><span class="k">class</span> <span class="nc">Output</span><span class="p">(</span><span class="n">FSRSModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class of a generic output module that is used to send a value to some device. Examples include DAQs or digital output channels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">FSRSModule</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;output&quot;</span>
+
+    <span class="c"># this is the only additional function an output device has to have</span>
+    <span class="c"># write some value to the output</span>
+<div class="viewcode-block" id="Output.write"><a class="viewcode-back" href="../../moutput.html#core.FSRSModule.Output.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write &#39;value&#39; to the device.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derived output module to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for any axis / stage device</span></div></div>
+<div class="viewcode-block" id="Axis"><a class="viewcode-back" href="../../maxis.html#core.FSRSModule.Axis">[docs]</a><span class="k">class</span> <span class="nc">Axis</span><span class="p">(</span><span class="n">FSRSModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for any axis or stage device.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">FSRSModule</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;axis&quot;</span>
+
+    <span class="c"># return current position</span>
+<div class="viewcode-block" id="Axis.pos"><a class="viewcode-back" href="../../maxis.html#core.FSRSModule.Axis.pos">[docs]</a>    <span class="k">def</span> <span class="nf">pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return current position.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="c"># goto new position</span></div>
+<div class="viewcode-block" id="Axis.goto"><a class="viewcode-back" href="../../maxis.html#core.FSRSModule.Axis.goto">[docs]</a>    <span class="k">def</span> <span class="nf">goto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Go to specified position.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="c"># should return True if stage is still moving</span></div>
+<div class="viewcode-block" id="Axis.is_moving"><a class="viewcode-back" href="../../maxis.html#core.FSRSModule.Axis.is_moving">[docs]</a>    <span class="k">def</span> <span class="nf">is_moving</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return True if stage is moving, otherwise False.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+
+<span class="c"># ##########################################################################################################################</span>
+<span class="c"># base class for any experiment</span></div></div>
+<div class="viewcode-block" id="Experiment"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment">[docs]</a><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="n">FSRSModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for any experiment control module. These are actually the heart of pyFSRS and control all experimental</span>
+<span class="sd">    conditions as well as all attached hardware.</span>
+
+<span class="sd">    When creating the properties, you should create a start/stop button with the label &quot;Start&quot;, which is used by the experiment control functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">FSRSModule</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&quot;experiment&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">others</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">btnOldLabel</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+
+        <span class="c"># when creating the properties, you should create a start/stop button with the label &quot;Start&quot;</span>
+
+        <span class="c"># for any experiment, the actual measurement is done in a new thread which communicates with the main GUI via call back functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="c"># ################################################################################</span>
+    <span class="c"># Initialize Experiment</span>
+    <span class="c"># use this function to get access to necessary devices</span>
+    <span class="c"># but also to enable / disable those user interfaces</span>
+<div class="viewcode-block" id="Experiment.initialize"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">others</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Save list of other modules to get access to hardware but also to be able to enable / disable those user interfaces during a scan.</span>
+
+<span class="sd">        .. important:: This function may be overwritten in your experiment class to implement some specific code but do not forget to store the list of other modules.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">others</span> <span class="o">=</span> <span class="n">others</span>
+
+    <span class="c"># ################################################################################</span>
+    <span class="c"># Start / Stop the Thread</span></div>
+<div class="viewcode-block" id="Experiment.start"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thread</span><span class="p">,</span> <span class="o">**</span><span class="n">argv</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start the measurement thread and deal with the button labels.</span>
+
+<span class="sd">        :param threading.Thread thread: An instance of the measurement thread class, which is a subclass of threading.Thread.</span>
+<span class="sd">        :param mixed argv: A list of parameters that are passed along to the measurement thread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPropertyByLabel</span><span class="p">(</span><span class="s">&quot;start&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">btnOldLabel</span> <span class="o">=</span> <span class="n">btn</span><span class="o">.</span><span class="n">getHandle</span><span class="p">()</span><span class="o">.</span><span class="n">GetLabel</span><span class="p">()</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">getHandle</span><span class="p">()</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;STOP&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="o">=</span> <span class="n">thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="Experiment.stop"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the measurement by sending the stop signal to the thread.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="c"># ################################################################################</span>
+    <span class="c"># &#39;Event&#39; Handlers which are called by the Thread as Call Back functions</span></div>
+<div class="viewcode-block" id="Experiment.onStarted"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.onStarted">[docs]</a>    <span class="k">def</span> <span class="nf">onStarted</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Event handler that gets called by the measurement thread once it has started the scan.</span>
+<span class="sd">        Blocks the user interface but keeps the stop-button alive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># block UI</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">others</span><span class="p">:</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">freezeUI</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c"># but keep the stop button active</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPropertyByLabel</span><span class="p">(</span><span class="s">&quot;start&quot;</span><span class="p">)</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">freezeUI</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+</div>
+<div class="viewcode-block" id="Experiment.onUpdate"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.onUpdate">[docs]</a>    <span class="k">def</span> <span class="nf">onUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Event handler that gets called periodically by the measurement thread to send data or</span>
+<span class="sd">        just status updates to the GUI.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten in your derived experiment class to implement your specific code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="Experiment.onFinished"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.onFinished">[docs]</a>    <span class="k">def</span> <span class="nf">onFinished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Event handler that gets called by the measurement thread once the scan has been finished.</span>
+<span class="sd">        Waits for the thread to die, changes the start/stop-button label and reactivates the user interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># make sure the thread is done</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># try to change button text</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPropertyByLabel</span><span class="p">(</span><span class="s">&quot;start&quot;</span><span class="p">)</span>
+            <span class="n">btn</span><span class="o">.</span><span class="n">getHandle</span><span class="p">()</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">btnOldLabel</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c"># free UI</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">others</span><span class="p">:</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">freezeUI</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+
+    <span class="c"># ################################################################################</span>
+    <span class="c"># shutdown functions for experiment module</span>
+
+    <span class="c"># take care about the running scan thread</span></div>
+<div class="viewcode-block" id="Experiment.canQuit"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.canQuit">[docs]</a>    <span class="k">def</span> <span class="nf">canQuit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shutdown handler that checks for a running measurement thread. If there is a scan running, it prompts the user to confirm aborting the scan before closing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">elif</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">MessageBox</span><span class="p">(</span><span class="s">&quot;Scan is running! Really quit?&quot;</span><span class="p">,</span> <span class="s">&quot;Quit&quot;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">YES</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">NO</span><span class="p">)</span> <span class="o">==</span> <span class="n">wx</span><span class="o">.</span><span class="n">YES</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="c"># take care about the running scan thread</span></div>
+<div class="viewcode-block" id="Experiment.shutdown"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.Experiment.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shutdown handler that kills the measurement thread and waits for it to die.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scanThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+
+<span class="c"># ################################################################################</span>
+<span class="c"># helper class for experiment providing the actual scan thread</span></div></div>
+<div class="viewcode-block" id="ExperimentThread"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.ExperimentThread">[docs]</a><span class="k">class</span> <span class="nc">ExperimentThread</span><span class="p">(</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prototype for a measurement thread that may be used for the actual experiment. It is subclassed from</span>
+<span class="sd">    `threading.Thread` and provides the same functionality. The thread is started by calling its `start`-function</span>
+<span class="sd">    and stopped by calling its `stop`-function. The actual measurement routine is `run`, which has to be overwritten in</span>
+<span class="sd">    your derived measurement thread.</span>
+
+<span class="sd">    .. important:: Provide your own __init__ routine based on this one to handle the measurement parameters correctly.</span>
+
+<span class="sd">    :param FSRSModule.FSRSModule parent: Parent module whose event handlers are called by this measurement thread.</span>
+<span class="sd">    :param mixed argv: Additional arguments that are passed to the thread. These are essentially the parameters that control the experiment, like start and stop positions for the stage and number of frames to capture and so on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">argv</span><span class="p">):</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canQuit</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>    <span class="c">#: User stop event, handles also sleep-functionality.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canQuit</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="c"># the main GUI calls this function to terminate the thread</span>
+<div class="viewcode-block" id="ExperimentThread.stop"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.ExperimentThread.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Stop the thread by setting the threading.Event `canQuit` to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canQuit</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+    <span class="c"># this is the actual scan routine</span></div>
+<div class="viewcode-block" id="ExperimentThread.run"><a class="viewcode-back" href="../../mexperiment.html#core.FSRSModule.ExperimentThread.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This is the actual scan routine.</span>
+
+<span class="sd">        .. important:: This function has to be overwritten by your implementation to handle your specific code.</span>
+
+<span class="sd">        A rough prototype should look like this::</span>
+
+<span class="sd">            def run(self):</span>
+<span class="sd">                # send started-event to GUI</span>
+<span class="sd">                wx.CallAfter(self.parent.onStarted)</span>
+
+<span class="sd">                # enter main loop - iterate until canQuit is True</span>
+<span class="sd">                while(self.canQuit.isSet() == 0):</span>
+
+<span class="sd">                    # put here your actual measurement protocol</span>
+<span class="sd">                    # stage move to here and there</span>
+<span class="sd">                    # wait for stage</span>
+<span class="sd">                    # read data</span>
+
+<span class="sd">                    # do not forget to send data or status information periodically to GUI</span>
+<span class="sd">                    wx.CallAfter(self.parent.onUpdate, *args)</span>
+
+<span class="sd">                # send terminated-event to GUI</span>
+<span class="sd">                wx.CallAfter(self.parent.onFinished)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># send started-Event</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">onStarted</span><span class="p">)</span>
+
+        <span class="c"># enter main loop</span>
+        <span class="k">while</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canQuit</span><span class="o">.</span><span class="n">isSet</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+            <span class="c"># send data to main GUI</span>
+            <span class="c"># wx.CallAfter(self.parent.onUpdate, *args)</span>
+
+        <span class="c"># send terminated-Event</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">CallAfter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">onFinished</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyFSRS 1.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+`ModulePanel`
+=============
+
+.. automodule:: core.ModulePanel
+    :members:

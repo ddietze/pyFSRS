@@ -1,0 +1,27 @@
+Installing pyFSRS
+=================
+
+There is no installation routine / setup file yet.
+In order to use pyFSRS, first make sure that all the prerequisites are met.
+Then download and unpack the zip archive and execute the main file *pyFSRS.py* using python.
+
+I have tested/developed this program using Python 2.7, mainly due to the availability of wxPython at that time.
+However, it should also run under Python 3 (with some fixes to the print-syntax).
+
+Prerequisites:
+--------------
+
+To run the bare GUI, you need the following modules installed:
+
+    * **wxPython**: The GUI is built on wxPython.
+    * **numpy**: Experimental data are stored and manipulated as numpy.arrays.
+
+For the XCScan module, you also need:
+
+    * **scipy**: Fitting of cross-correlation data with Gaussians.
+
+For the devices, there are additional specific dependencies that have to be met:
+
+    * **pyVISA**: GPIB devices like lock-ins or stage controllers.
+    * **PyDAQmx**: National Instruments DAQ boards for in- and output (for shutters or stepper motors).
+    * **PICam library**: Princeton Instruments PICam compatible cameras.

@@ -1,0 +1,5 @@
+`FSRSModule.Output`
+===================
+
+.. autoclass:: core.FSRSModule.Output
+    :members:

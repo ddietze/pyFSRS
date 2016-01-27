@@ -1,0 +1,5 @@
+`FSRSutils`
+============
+
+.. automodule:: core.FSRSutils
+    :members:

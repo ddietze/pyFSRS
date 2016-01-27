@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Extending pyFSRS &mdash; pyFSRS 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="top" title="pyFSRS 1.0 documentation" href="index.html" />
+    <link rel="next" title="Description of Core Modules" href="coremodules.html" />
+    <link rel="prev" title="Shipped Modules" href="modules.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="coremodules.html" title="Description of Core Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Shipped Modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fsrs.html">What is FSRS?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Shipped Modules</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Extending pyFSRS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coremodules.html">Description of Core Modules</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="extending-pyfsrs">
+<h1>Extending pyFSRS<a class="headerlink" href="#extending-pyfsrs" title="Permalink to this headline">¶</a></h1>
+<p>The pyFSRS GUI is fully modular, i.e., all devices and measurement modi are incorporated as modules
+that are loaded dynamically at startup. Therefore, extending pyFSRS is as easy as creating a new
+subclass from <code class="xref py py-mod docutils literal"><span class="pre">FSRSModule</span></code> and placing it in the <cite>installed_modules</cite> folder. The only restriction is
+that each class has to be in its own file having the identical filename as the class name. For example,
+<cite>myClass</cite> should be placed in a file called <cite>myClass.py</cite>.</p>
+<p>A good place to start are, of course, the existing modules. New hardware modules can easily be created from the existing <em>dummy</em> modules.
+Furthermore, there are a set of more specialized subclasses of <cite>FSRSModule</cite> that provide the required interface functions and some basic functionality:
+<a class="reference internal" href="minput.html#core.FSRSModule.Input" title="core.FSRSModule.Input"><code class="xref py py-class docutils literal"><span class="pre">core.FSRSModule.Input</span></code></a>, <a class="reference internal" href="mcamera.html#core.FSRSModule.Camera" title="core.FSRSModule.Camera"><code class="xref py py-class docutils literal"><span class="pre">core.FSRSModule.Camera</span></code></a>, <a class="reference internal" href="maxis.html#core.FSRSModule.Axis" title="core.FSRSModule.Axis"><code class="xref py py-class docutils literal"><span class="pre">core.FSRSModule.Axis</span></code></a>, <a class="reference internal" href="moutput.html#core.FSRSModule.Output" title="core.FSRSModule.Output"><code class="xref py py-class docutils literal"><span class="pre">core.FSRSModule.Output</span></code></a>, and <a class="reference internal" href="mexperiment.html#core.FSRSModule.Experiment" title="core.FSRSModule.Experiment"><code class="xref py py-class docutils literal"><span class="pre">core.FSRSModule.Experiment</span></code></a>.</p>
+<div class="section" id="startup-procedure">
+<h2>Startup Procedure<a class="headerlink" href="#startup-procedure" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Upon startup pyFSRS browses the <cite>installed_modules</cite> folder for FSRSModules and adds each module as a new panel to the main GUI. The modules have to be sorted in folders according to their function. Each folder is represented as a new page containing module panels. The name of the folder is directly used for naming the tab. In summary, new tabs are created by adding new folders. Module panels are then populated by copying the module files into this folder. Currently, the modules are sorted according to function.</li>
+<li>When a module is found, pyFSRS first tries to call the module function <cite>howMany</cite>, which should return a positive non-zero integer number <cite>N</cite> that indicates how many times this module should be initialized. Currently, this function is only used by the <code class="xref py py-mod docutils literal"><span class="pre">SR830</span></code> module to support multiple SR830 lock-in amplifiers through a single module class.</li>
+<li>pyFSRS then creates <cite>N</cite> instances of the module class.</li>
+<li>After all modules are loaded, they are initialized by calling their <cite>initialize</cite> member function. A list of all modules is passed to this function to allow the module to add functionality according to installed modules. For instance, a measurement module would use this opportunity to populate the lists of input and motor devices. A copy of this list is then usually stored to enable <cite>freezeUI</cite> to (un-) block the GUI during a measurement.</li>
+<li>pyFSRS is now ready to be used.</li>
+</ol>
+</div>
+<div class="section" id="shutdown-procedure">
+<h2>Shutdown Procedure<a class="headerlink" href="#shutdown-procedure" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>When the user wants to exit the program, pyFSRS first calls the <cite>canQuit</cite> member function of each module. This function can be used to veto the decision to shutdown, for instance, if a measurement is still in progress.</li>
+<li>Only if all modules return <cite>True</cite>, pyFSRS goes on to call each modules&#8217; <cite>shutdown</cite> member function to ensure a controlled exit. Use this function to home motorized stages and safely exit the hardware libraries.</li>
+<li>Finally, pyFSRS quits.</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="coremodules.html" title="Description of Core Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Shipped Modules"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyFSRS 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Daniel R. Dietze.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
