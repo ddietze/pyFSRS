@@ -8,14 +8,15 @@ any other pump-probe experiment without modification.
 
 If you are interested in the technical and scientific details of FSRS, I recommend the following two papers as a starting point:
 
+* Dietze and Mathies, *ChemPhysChem* **17**, 1224 (2016).
 * McCamant et al., *Appl. Spectrosc.* **57**, 1317 (2003).
 * McCamant et al., *Rev. Sci. Instrum.* **75**, 4971 (2004).
 
 The architecture of the program is modular and open, so that anyone can modify it according
-to his/her needs: The pyFSRS GUI is fully modular, i.e., all devices and measurement modi are 
-incorporated as modules that are loaded dynamically at startup. Therefore, extending pyFSRS is as easy 
-as creating a new subclass from `FSRSModule` and placing it in the `installed_modules` folder. The only 
-restriction is that each class has to be in its own file having the identical filename as the class name. 
+to his/her needs: The pyFSRS GUI is fully modular, i.e., all devices and measurement modi are
+incorporated as modules that are loaded dynamically at startup. Therefore, extending pyFSRS is as easy
+as creating a new subclass from `FSRSModule` and placing it in the `installed_modules` folder. The only
+restriction is that each class has to be in its own file having the identical filename as the class name.
 For example, `myClass` should be placed in a file called `myClass.py`.
 
 Installation
