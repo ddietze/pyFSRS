@@ -6,7 +6,7 @@ femtosecond stimulated Raman spectroscopy and transient-absorption spectroscopy.
 However, it is not limited to these two applications and can be directly used for
 any other pump-probe experiment without modification.
 
-If you are interested in the technical and scientific details of FSRS, I recommend the following two papers as a starting point:
+If you are interested in the technical and scientific details of FSRS, I recommend the following three papers as a starting point:
 
 * Dietze and Mathies, *ChemPhysChem* **17**, 1224 (2016).
 * McCamant et al., *Appl. Spectrosc.* **57**, 1317 (2003).
