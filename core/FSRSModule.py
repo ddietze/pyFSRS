@@ -75,7 +75,7 @@ def load_from_file(filepath):
 
 # ##########################################################################################################################
 # text control validators
-class NumValidator(wx.PyValidator):
+class NumValidator(wx.Validator):
     """Custom text control validator to be used internally with text inputs for numerical values.
     The validator test for conversion of the entered string into the desired numerical or string data type. If it fails,
     it displays a messge box asking the user to correct his input.
@@ -83,7 +83,7 @@ class NumValidator(wx.PyValidator):
     :param str type: Type of allowed input ('float' = default, 'int', 'str').
     """
     def __init__(self, type='float'):
-        wx.PyValidator.__init__(self)
+        wx.Validator.__init__(self)
         # self.Bind(wx.EVT_CHAR, self.OnChar)
         # self.Bind(wx.EVT_CHAR, self.OnText)
         self.oldtext = "0"

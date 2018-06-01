@@ -137,7 +137,7 @@ class ModulePanel(wx.Panel):
         """Mouse move event handler that controls cursor appearance.
         """
         if self.mouseInBtn():
-            self.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+            self.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         else:
             self.SetCursor(self.dfltCursor)
 

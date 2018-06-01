@@ -48,7 +48,7 @@ class FilePickerCtrl(wx.Panel):
         if mode not in ["open", "save", "path"]:
             raise ValueError("Mode must be 'path', 'open' or 'save'!")
         if mode == "open":
-            self.mode = wx.OPEN
+            self.mode = wx.FD_OPEN
             self.dlgt = "Choose file to open.."
         elif mode == "save":
             self.mode = wx.SAVE
