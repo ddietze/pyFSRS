@@ -88,7 +88,7 @@ class DAQScan(module.Experiment):
             wx.MessageBox("Nothing to save yet!", "Save Last Scan", style=wx.OK)
             return
 
-        dlg = wx.FileDialog(None, "Save Last Scan", os.getcwd(), "", "*.*", wx.SAVE)
+        dlg = wx.FileDialog(None, "Save Last Scan", os.getcwd(), "", "*.*", wx.FD_SAVE)
 
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
