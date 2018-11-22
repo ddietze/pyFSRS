@@ -72,25 +72,51 @@ def installWX():
 			print "wx version is up to date."
 		else:
 			print "wx version is up not preferable. Installing version 4.0.1:"
-			os.system("pip install -U wx==4.0.1")
+			os.system("pip install -U wxpython==4.0.1")
 
 	except ImportError:
 		print "wx is not installed. Installing version 4.0.1:"
-		os.system("pip install -U wx==4.0.1")
+		os.system("pip install -U wxpython==4.0.1")
 
 def installVisa():
 	try:
-		import visa
-		visaversion= visa.__version__
+		import pyvisa
+		visaversion= pyvisa.__version__
 		if visaversion == "1.9.0":
 			print "visa version is up to date."
 		else:
 			print "visa version is up not preferable. Installing version 1.9.0:"
-			os.system("pip install -U visa")
+			os.system("pip install -U pyvisa==1.9.0")
 	except ImportError:
 		print "visa is not installed. Installing version 1.9.0:"
-		os.system("pip install -U visa")
+		os.system("pip install -U pyvisa==1.9.0")
 
+
+def installMatplotlib():
+	try:
+		import matplotlib
+		matplotlibversion= matplotlib.__version__
+		if matplotlibversion == "2.2.3":
+			print "matplotlib version is up to date."
+		else:
+			print "matplotlib version is up not preferable. Installing version 1.9.0:"
+			os.system("pip install -U matplotlib==2.2.3")
+	except ImportError:
+		print "matplotlib is not installed. Installing version 2.2.3:"
+		os.system("pip install -U matplotlib==2.2.3")
+
+def installpyDAQmx():
+	try:
+		import pyDAQmx
+		pyDAQmxversion= pyDAQmx.__version__
+		if pyDAQmxversion == "1.4.1":
+			print "pyDAQmx version is up to date."
+		else:
+			print "pyDAQmx version is up not preferable. Installing version 1.9.0:"
+			os.system("pip install -U pyDAQmx==1.4.1")
+	except ImportError:
+		print "matplotlib is not installed. Installing version 2.2.3:"
+		os.system("pip install -U pyDAQmx==1.4.1")
 
 
 
@@ -98,3 +124,6 @@ installNumpy()
 installScipy()
 installWX()
 installVisa()
+installMatplotlib()
+installpyDAQmx()
+print "-If all packages installed correctly run 'python pyFSRS.py'"
