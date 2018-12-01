@@ -1,6 +1,7 @@
 pyFSRS - Femtosecond Stimulated Raman Spectroscopy Made Easy!
 =============================================================
 
+
 pyFSRS is a modular GUI for pump-probe-type optical experiments, specialized for
 femtosecond stimulated Raman spectroscopy and transient-absorption spectroscopy.
 However, it is not limited to these two applications and can be directly used for
@@ -19,14 +20,21 @@ as creating a new subclass from `FSRSModule` and placing it in the `installed_mo
 restriction is that each class has to be in its own file having the identical filename as the class name.
 For example, `myClass` should be placed in a file called `myClass.py`.
 
+Video Tutorial
+============
+
+A short video tutorial of installation and features.
+https://youtu.be/-cuXmEfwrig
+
 Installation
 ============
 
-There is no installation routine / setup file yet.
+install with 'python pyfsrs-installer.py' to get the correct python libraries
+
 In order to use pyFSRS, first make sure that all the prerequisites are met.
 Then download and unpack the zip archive and execute the main file *pyFSRS.py* using python.
 
-I have tested/developed this program using Python 2.7 and Windows.
+I have tested/developed this program using Python 2.7 and Windows xp, 7,8 and 10.
 
 Prerequisites:
 --------------
