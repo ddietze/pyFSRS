@@ -7,7 +7,8 @@ DAQMonitor reads N samples from an input device and displays statistics.\
 If the measurement is outside of a tolerance threshold (standard deviations) it faults.
 You can report the fault by sending an email and/or by logging it in a faultLog.txt
 Data may be saved as a TAB-delimited two-column ASCII file (time, value).
-
+Make sure your email address is allowed to send emails from 'insecure applications"
+For Gmail accounts this is done at https://myaccount.google.com/lesssecureapps?pli=1
 ..
    This file is part of the pyFSRS app.
 
@@ -47,7 +48,6 @@ tolerance=[]
 
 def sendEmail(senderEmail,password,destinationEmail,duration,tolerance):
 #Create a catalogue of smtp names and ports
-    print "loc 2"
     if "gmail" in senderEmail:
         hostName='smtp.gmail.com'
         portNum=587
@@ -58,14 +58,14 @@ def sendEmail(senderEmail,password,destinationEmail,duration,tolerance):
         hostName='smtp.office365.com'
         portNum=587
     else:
-        print "can't identify port number or host name for given senderEmail. Please look it up and enter it manually into the code"
+        print "can't identify port number or host name for given senderEmail. Please look it up and enter it manually into the code daqMonitor."
         return
     
     s = smtplib.SMTP(host=hostName, port=portNum)
     s.starttls()
     s.login(senderEmail, password)
     subject = "Instrument Fault Alert pyFSRS"
-    text = "This is an automated alter from pyFSRS. The instrument is unstable.\n An average over {} measurements have fell outside a tolerance of {} standard deviations.\nHave a great day!".format(str(duration),str(tolerance))
+    text = "This is an automated alert from pyFSRS. The measurement is unstable.\n An average over {} measurements have fell outside a tolerance of {} standard deviations.\nHave a great day!".format(str(duration),str(tolerance))
     message = 'Subject: {}\n\n{}'.format(subject, text)
     s.sendmail(senderEmail,destinationEmail,message)
     # Terminate the SMTP session and close the connection
@@ -198,7 +198,6 @@ class DAQMonitor(module.Experiment):
                     print "Instability Fault. Duration = {}\tTolerance set to {} standard deviations".format(str(duration),str(tolerance))
                     self.getPropertyByLabel("Status").setValue("Unstable")
                     if self.getPropertyByLabel("Send Email at Fault").getValue()==1:
-                        print "loc 1"
                         destinationEmail=self.getPropertyByLabel("Destination Email").getValue()
                         password=self.getPropertyByLabel("Password").getValue()
                         senderEmail=self.getPropertyByLabel("Outgoing Email Address").getValue()
