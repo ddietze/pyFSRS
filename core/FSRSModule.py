@@ -717,6 +717,41 @@ class Axis(FSRSModule):
 
 
 # ##########################################################################################################################
+# base class for any valve / stage device
+class Valve(FSRSModule):
+    """Base class for any valve or stage device.
+    """
+    def __init__(self):
+        FSRSModule.__init__(self)
+        self.type = "valve"
+
+    # return current position
+    def pos(self):
+        """Return current position.
+
+        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.
+        """
+        return 0
+
+    # goto new position
+    def goto(self, pos):
+        """Go to specified position.
+
+        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.
+        """
+        pass
+
+    # should return True if stage is still moving
+    def is_moving(self):
+        """Return True if stage is moving, otherwise False.
+
+        .. important:: This function has to be overwritten by any derived motor class to implement the device specific code.
+        """
+        return False
+
+
+
+# ##########################################################################################################################
 # base class for any experiment
 class Experiment(FSRSModule):
     """Base class for any experiment control module. These are actually the heart of pyFSRS and control all experimental
